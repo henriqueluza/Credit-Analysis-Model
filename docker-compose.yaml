@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  # Serviço do Banco de Dados
+  db:
+    image: postgres:15  # Versão estável do Postgres
+    container_name: postgres_credito  # Nome fácil para identificar
+    restart: always
+    environment:
+      POSTGRES_USER: admin_credito    # Seu usuário
+      POSTGRES_PASSWORD: senha_secreta_123 # Sua senha (mudaremos antes do deploy final)
+      POSTGRES_DB: db_risco_credito   # Nome do banco específico do seu projeto
+    ports:
+      - "5432:5432" # Porta do PC : Porta do Container
+    volumes:
+      - pg_data:/var/lib/postgresql/data # Onde os dados ficam salvos (PERSISTÊNCIA)
+
+# Definição do volume para que os dados não sumam se você desligar o container
+volumes:
+  pg_data:
