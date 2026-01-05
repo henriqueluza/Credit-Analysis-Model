@@ -5,10 +5,12 @@ st.set_page_config(page_title="Credit Score Analysis Project", page_icon="💰")
 st.title("Sistema de Análise de Crédito")
 st.markdown("Preencha os dados abaixo para obter uma previsão de aprovação de crédito")
 
-API_URL = "https://localhost:8000/predict"
+API_URL = "http://localhost:8001/predict"
 
 with st.form('formulario_credito'):
     st.subheader("Preencha os dados do cliente")
+
+    # cria colunas com validação dupla
 
     col1, col2 = st.columns(2)
 
@@ -35,3 +37,47 @@ with st.form('formulario_credito'):
         prazo_meses = st.number_input("Prazo (meses)", min_value=1, max_value=360, value=24)
 
     submit_button = st.form_submit_button("Avaliar Crédito")
+
+    # Lógica de conexão
+
+    if submit_button:
+        dicionario_moradia = {
+            "Casa Própria": "own",
+            "Aluguel": "rent",
+            "Mora de Graça/Com os Pais": "free"
+        }
+        situacao_enviar = dicionario_moradia[situacao_moradia_label]
+
+        payload = {
+            "idade": idade,
+            "valor_conta_poupanca": valor_conta_poupanca,
+            "valor_conta_corrente": valor_conta_corrente,
+            "salario_anual": salario_anual,
+            "valor_emprestimo": valor_emprestimo,
+            "prazo_meses": prazo_meses,
+            "situacao_moradia": situacao_enviar
+        }
+
+        try:
+            with st.spinner("Consultando o modelo..."):
+                response = requests.post(API_URL, json=payload)
+
+            if response.status_code == 200:
+                resultado = response.json()
+                status = resultado["resultado"]
+                probabilidade = resultado["probabilidade_risco"]
+
+                if status == "Aprovado":
+                    st.success(f"APROVADO")
+                    st.metric(label = "Probabilidade de risco", value=f"{probabilidade:.2%}", delta="Baixo Risco")
+                else:
+                    st.error(f" REPROVADO")
+                    st.metric(label="Probabilidade de Risco", value=f"{probabilidade:.2%}", delta_color="inverse", delta="Alto Risco")
+
+                with st.expander("Ver detalhes técnicos"):
+                    st.json(resultado)
+            else:
+                st.error(f"Erro na API: {response.text}")
+
+        except requests.exceptions.ConnectionError:
+            st.error("Não foi possível conectar à API. Verifique se o backend está funcionando corretamente.")

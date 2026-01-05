@@ -10,10 +10,10 @@ import joblib
 SituacaoMoradia = Literal['own', 'rent', 'free']
 
 class ClienteInput(BaseModel):
-    idade: int = Field(title="Idade", gt=18, description="Idade do cliente deve ser maior que 18")
+    idade: int = Field(title="Idade", ge=18, description="Idade do cliente deve ser maior que 18")
     valor_conta_poupanca: float = Field(title="Valor presente na conta poupança", description='Valor presente na conta poupança do cliente', ge=0)
     valor_conta_corrente: float = Field(title="Valor presente na conta corrente", description='Valor presente na conta corrente do cliente', ge=0)
-    salario_anual: float = Field(title='Salário Anual', description="Salário anual do cliente",gt=0)
+    salario_anual: float = Field(title='Salário Anual', description="Salário anual do cliente",ge=0)
     valor_emprestimo: float = Field(title="Valor do empréstimo", description="Valor do empréstimo", gt=0)
     prazo_meses: int = Field(title="Prazo do empréstimo", description="Prazo em meses do empréstimo", gt=0)
     situacao_moradia: SituacaoMoradia = Field(title="Situação da moradia", description="Cliente é dono, mora de aluguel ou mora de graça?")
