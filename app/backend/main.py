@@ -2,6 +2,9 @@ from dataclasses import field
 from fastapi import FastAPI
 from pydantic import BaseModel, Field, field_validator
 from typing import Literal
+import pandas as pd
+import numpy as np
+import joblib
 
 app = FastAPI(title="Sistema de Análise de Crédito")
 
@@ -27,6 +30,7 @@ class ClienteInput(BaseModel):
     finalidade_emprestimo: FinalidadeEmprestimo = Field(title="Finalidade do empréstimo", description="Finalidade do empréstimo")
     situacao_moradia: SituacaoMoradia = Field(title="Situação da moradia", description="Cliente é dono, mora de aluguel ou mora de graça?")
 
+    # função decoradora para validar se a idade é menor que 120 anos
     @field_validator('idade')
     @classmethod
     def validar_idade(cls, v):
@@ -34,12 +38,59 @@ class ClienteInput(BaseModel):
             raise ValueError('Idade inválida; Deve ser menor que 120 anos')
         return v
 
+    # função decoradora para validar se o prazo é menor que 30 anos (360 meses)
     @field_validator('prazo_meses')
     @classmethod
     def validar_prazo(cls, v):
         if v > 360:
             raise ValueError("Prazo inválido; Prazo deve ser no máximo 30 anos")
         return v
+
+
+def preparar_dados_modelo(cliente: ClienteInput) -> pd.DataFrame:
+
+    # a função usa typehints para dizer que o input cliente deve ser do tipo ClienteInput e retorna um df do pandas
+
+    # cria as variáveis derivadas
+
+    parcela_mensal_estimada = cliente.valor_emprestimo / cliente.prazo_meses
+    renda_mensal = cliente.salario_anual / 12
+    renda_livre_mensal = renda_mensal - parcela_mensal_estimada
+    comprometimento_renda = parcela_mensal_estimada / max(renda_mensal, 1)
+    cobertura_liquidez = (cliente.valor_conta_corrente + cliente.valor_conta_poupanca) / (parcela_mensal_estimada + 0.01)
+    is_conta_corrente_zero = 1 if cliente.valor_conta_corrente == 0 else 0
+
+    # cria as variáveis logaritmicas
+
+    log_valor_emprestimo = np.log1p(cliente.valor_emprestimo)
+    log_valor_conta_corrente = np.log1p(cliente.valor_conta_corrente)
+
+    # one hot encoding colocando free como referência
+
+    moradia_own = 1 if cliente.situacao_moradia == "own" else 0
+    moradia_rent = 1 if cliente.situacao_moradia == "rent" else 0
+
+  # todas as variáveis de finalidade foram removidas já que não foram usadas para treinar o modelo
+
+    dados = {
+        'idade': [cliente.idade],
+        'log_valor_emprestimo': [log_valor_emprestimo],
+        'log_valor_conta_corrente': [log_valor_conta_corrente],
+        'is_conta_corrente_zero': [is_conta_corrente_zero],
+        'prazo_meses': [cliente.prazo_meses],
+        'comprometimento_renda': [comprometimento_renda],
+        'parcela_mensal_estimada': [parcela_mensal_estimada],
+        'renda_livre_mensal': [renda_livre_mensal],
+        'cobertura_liquidez': [cobertura_liquidez],
+        'moradia_own': [moradia_own],
+        'moradia_rent': [moradia_rent]
+    }
+
+    # cria dicionário para converter em dataframe
+
+    return pd.DataFrame(dados)
+
+
 
 @app.get("/")
 def read_root():
