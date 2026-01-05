@@ -1,12 +1,11 @@
 from dataclasses import field
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from pydantic import BaseModel, Field, field_validator
 from typing import Literal
 import pandas as pd
 import numpy as np
 import joblib
-
-app = FastAPI(title="Sistema de Análise de Crédito")
 
 SituacaoMoradia = Literal['own', 'rent', 'free']
 FinalidadeEmprestimo = Literal[
@@ -90,8 +89,27 @@ def preparar_dados_modelo(cliente: ClienteInput) -> pd.DataFrame:
 
     return pd.DataFrame(dados)
 
+modelos = {
+}
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Carregando modelo na memória")
+    try:
+        dados_modelo = joblib.load("../../modelos/modelo_credito_final.joblib")
+        modelos['pipeline'] = dados_modelo['modelo']
+        modelos['threshold'] = dados_modelo['threshold_f2']
+        modelos['features'] = dados_modelo['features']
+        print('Modelo carregado com sucesso!')
+    except FileNotFoundError:
+        print("Erro: Arquivo do modelo não foi encontrado.")
+        raise
+    yield # divide o código em startup (carrega o modelo) e shutdown (limpeza do modelo)
 
+    modelos.clear()
+    print("Modelo removido da memória.")
+
+app = FastAPI(title="Sistema de Análise de Crédito")
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
