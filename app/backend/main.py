@@ -1,7 +1,6 @@
 from dataclasses import field
-
 from fastapi import FastAPI
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Literal
 
 app = FastAPI(title="Sistema de Análise de Crédito")
@@ -28,19 +27,19 @@ class ClienteInput(BaseModel):
     finalidade_emprestimo: FinalidadeEmprestimo = Field(title="Finalidade do empréstimo", description="Finalidade do empréstimo")
     situacao_moradia: SituacaoMoradia = Field(title="Situação da moradia", description="Cliente é dono, mora de aluguel ou mora de graça?")
 
-@field_validator('idade')
-@classmethod
-def validar_idade(cls, v):
-    if v > 120:
-        raise ValueError('Idade inválida; Deve ser menor que 120 anos')
-    return v
+    @field_validator('idade')
+    @classmethod
+    def validar_idade(cls, v):
+        if v > 120:
+            raise ValueError('Idade inválida; Deve ser menor que 120 anos')
+        return v
 
-@field_validator('prazo_meses')
-@classmethod
-def validar_prazo(cls, v):
-    if v > 360:
-        raise ValueError("Prazo inválido; Prazo deve ser no máximo 30 anos")
-    return v
+    @field_validator('prazo_meses')
+    @classmethod
+    def validar_prazo(cls, v):
+        if v > 360:
+            raise ValueError("Prazo inválido; Prazo deve ser no máximo 30 anos")
+        return v
 
 @app.get("/")
 def read_root():
