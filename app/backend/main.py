@@ -1,11 +1,11 @@
-from dataclasses import field
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field, field_validator
 from typing import Literal
 import pandas as pd
 import numpy as np
 import joblib
+from sympy.polys.factortools import dmp_factor_list
 
 SituacaoMoradia = Literal['own', 'rent', 'free']
 FinalidadeEmprestimo = Literal[
@@ -110,6 +110,32 @@ async def lifespan(app: FastAPI):
     print("Modelo removido da memória.")
 
 app = FastAPI(title="Sistema de Análise de Crédito")
+
+@app.post('/predict')
+def predict_credit(cliente: ClienteInput):
+    if 'pipeline' not in modelos or 'features' not in modelos: # verifica se o modelo foi carregado corretamente
+        raise HTTPException(status_code=503, detail="O modelo ainda não foi carregado. Tente novamente em segundos.")
+    try:
+        df = preparar_dados_modelo(cliente)
+        colunas_esperadas = modelos['features'] # deixa as colunas na mesma forma salvas na variável features
+        colunas_faltantes = set(colunas_esperadas) - set(df.columns)
+        if colunas_faltantes:
+            raise HTTPException(status_code=500, detail=f"Erro interno: Faltam colunas calculadas: {colunas_faltantes}")
+
+        df_final = df_input[cols_modelo]
+
+        pipeline = modelos['pipeline']
+        proba = pipeline.predict_proba(df_final)[0][1]
+        threshold = modelos['threshold']
+        aprovado = proba < threshold
+
+        return {
+            'resultado': "Aprovado" if aprovado else "Reprovado",
+            'probabilidade_risco': round(proba, 4),
+            'threshold_utilizado': round(threshold, 4)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
