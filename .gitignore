@@ -1,4 +1,18 @@
+# Ambiente virtual
 venv/
+.venv/
+
+# Cache Python
 *.pyc
 __pycache__/
+
+# Variáveis de ambiente
 .env
+
+# IDE
+.idea/
+
+# Dados - ignore arquivos grandes por padrão
+*.parquet
+*.csv
+
