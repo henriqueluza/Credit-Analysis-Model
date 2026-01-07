@@ -8,7 +8,7 @@ load_dotenv()
 
 # cria e printa a lista dos nomes da colunas para poder organizar a tabela sql
 
-df = pd.read_csv("modelo v2/data/bronze/cs-training.csv")
+df = pd.read_csv("../data/bronze/cs-training.csv")
 
 print(df.columns.tolist())
 
