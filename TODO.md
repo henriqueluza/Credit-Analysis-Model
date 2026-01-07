@@ -5,8 +5,8 @@
 
 ### 1. Configuração e Estrutura de Dados (Data Engineering)
 - [x] Configurar um container Docker para o banco de dados PostgreSQL.
-- [ ] Criar um script (ETL) em Python para simular a ingestão do "Data Lake".
-- [ ] Definir o schema do banco de dados.
+- [x] Criar um script (ETL) em Python para simular a ingestão do "Data Lake".
+- [x] Definir o schema do banco de dados.
 - [ ] Validar a integridade dos dados inseridos via queries SQL.
 
 ### 2. Ciência de Dados e Modelagem (Data Science)
