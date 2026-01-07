@@ -1,12 +1,14 @@
+import os
+
 import pandas as pd
-import psycopg2
 from dotenv import load_dotenv
+from sqlalchemy import create_engine
 
 load_dotenv()
 
-# criamos e printamos a lista dos nomes da colunas para poder organizar a tabela sql
+# cria e printa a lista dos nomes da colunas para poder organizar a tabela sql
 
-df = pd.read_csv("modelo v2/data/cs-training.csv")
+df = pd.read_csv("modelo v2/data/bronze/cs-training.csv")
 
 print(df.columns.tolist())
 
@@ -29,3 +31,20 @@ df = df.drop(columns = ["Unnamed: 0"])
 
 print("Colunas renomeadas:")
 print(df.columns.tolist())
+
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
+db_host = os.getenv("DB_HOST")
+db_name = os.getenv("DB_NAME")
+db_port = os.getenv("DB_PORT")
+
+connection_string = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+engine = create_engine(connection_string)
+
+table_name = 'analise_credito'
+
+try:
+    df.to_sql(table_name, engine, if_exists='replace', index=False)
+    print("Tabela criada com sucesso e dados inseridos!")
+except Exception as e:
+    print(f"Erro ao salvar no banco: {e}")
