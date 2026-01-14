@@ -7,11 +7,10 @@
 - [x] Configurar um container Docker para o banco de dados PostgreSQL.
 - [x] Criar um script (ETL) em Python para simular a ingestão do "Data Lake".
 - [x] Definir o schema do banco de dados.
-- [ ] Validar a integridade dos dados inseridos via queries SQL.
 
 ### 2. Ciência de Dados e Modelagem (Data Science)
-- [ ] Realizar Análise Exploratória de Dados (EDA) nos Jupyter Notebooks.
-- [ ] Realizar pré-processamento (tratamento de nulos, encoding, normalização).
+- [x] Realizar Análise Exploratória de Dados (EDA) nos Jupyter Notebooks.
+- [x] Realizar pré-processamento (tratamento de nulos, encoding, normalização).
 - [ ] Treinar múltiplos modelos (Logistic Regression, RandomForest, XGBoost, etc.).
 - [ ] Otimizar hiperparâmetros focando no **F-beta score**.
 - [ ] Serializar o melhor modelo.
