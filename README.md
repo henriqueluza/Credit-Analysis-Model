@@ -1,6 +1,19 @@
  # Credit-Analysis-Model
  
-## Estrutura do Projeto
+## 🏛️ Arquitetura do Projeto
+
+## ⚙️ Stack Tecnológica
+
+- Python e bibliotecas (Pandas, Numpy, SQLAlchemy, joblib, scikit-learn, Imbalanced-learn, FastAPI, Streamlit)
+- PostgreSQL
+- Docker
+- Apache Airflow
+- AWS
+- GitHub Actions
+ 
+## 🧪 Metodologia do Projeto
+ 
+## 📂 Estrutura do Projeto
  ```
 Credit-Analysis-Model/
 └── modelo v2/ 
@@ -41,3 +54,21 @@ Credit-Analysis-Model/
     ├── .gitignore                  # Arquivos e pastas a serem ignorados pelo Git
     └── README.md                   # Documentação do portfólio
 ```
+
+## 💻 Como Executar o Projeto  
+
+1. Clone o repositório
+```
+git clone https://github.com/henriqueluza/Credit-Analysis-Model
+
+```
+
+2. Suba toda a infraestrutura com Docker Compose
+```
+docker-compose up -d
+```
+3. API está disponível em: `http://localhost:8000` e o Frontend em `http://localhost:8501`
+
+
+## 📊 Resultados 
+
