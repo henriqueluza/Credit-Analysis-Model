@@ -15,44 +15,82 @@
  
 ## 📂 Estrutura do Projeto
  ```
-Credit-Analysis-Model/
-└── modelo v2/ 
-    ├── data_lake/                  # Arquitetura Medallion
-    │   ├── bronze/                 # Dados crus do Kaggle (.parquet ou .csv)
-    │   ├── silver/                 # Dados limpos, engenharia de atributos e log aplicado
-    │   └── gold/                   # Predições finais e tabelas para o dashboard
-    ├── notebooks/                  # Desenvolvimento e Exploração
-    │   ├── notebook1.ipynb         # Download e carrega na Bronze
-    │   ├── notebook2.ipynb         # EDA, Limpeza, Log e Silver
-    │   └── notebook3.ipynb         # Pipeline, SMOTE, Tunagem e Gold
-    ├── src/                      
-    │   ├── backend/                    # Backend com FastAPI
-    │   │   ├── main.py
-    │   │   ├── model_handler.py    # Lógica para carregar e usar o .joblib
-    │   │   └── database.py         # Conexão com PostgreSQL (SQLAlchemy)
-    │   ├── frontend/               # Interface com Streamlit
-    │   │   └── app.py
-    │   ├── utils/                  # Funções compartilhadas
-    │   │   └── helpers.py
-    │   └── models/                 # Pasta para salvar o modelo treinado
-    │       └── model_v1.joblib
-    ├── airflow/                    # Orquestração
-    │   ├── dags/                   # DAGs do Airflow
-    │   └── scripts/                # Scripts que a DAG irá chamar
-    ├── infrastructure/             # Configurações de infra e banco
-    │   ├── postgres/
-    │   │   └── init.sql            # Queries para criar as tabelas iniciais
-    │   ├──docker/
-    │   └──aws/     
-    │
-    ├── tests/                      # Testes unitários para API
-    ├── .github/                    # CI/CD
-    │   └── workflows/
-    │       └── main.yml            # GitHub Actions (Deploy na AWS)
-    ├── docker-compose.yml          # Orquestrador de API, Front, DB e Airflow
-    ├── requirements.txt            # Dependências do projeto
-    ├── .gitignore                  # Arquivos e pastas a serem ignorados pelo Git
-    └── README.md                   # Documentação do portfólio
+credit-risk-model/
+│
+├── data/                          # Dados locais (gitignore)
+│   ├── raw/                       # Download do Kaggle
+│   ├── processed/                 # Dados limpos
+│   └── features/                  # Feature engineering
+│
+├── notebooks/
+│   ├── 01_eda.ipynb              # Análise exploratória
+│   ├── 02_feature_engineering.ipynb
+│   ├── 03_baseline_models.ipynb
+│   └── 04_model_optimization.ipynb
+│
+├── src/
+│   ├── data/
+│   │   ├── extract.py            # Download e upload S3
+│   │   ├── transform.py          # Limpeza e feature eng
+│   │   ├── load.py               # Carga para PostgreSQL
+│   │   └── schemas.py            # Pydantic schemas
+│   │
+│   ├── models/
+│   │   ├── train.py              # Pipeline de treinamento
+│   │   ├── evaluate.py           # Métricas e validação
+│   │   ├── predict.py            # Inferência
+│   │   └── registry.py           # MLflow model registry
+│   │
+│   ├── api/
+│   │   ├── main.py               # FastAPI app
+│   │   ├── routes.py             # Endpoints
+│   │   ├── dependencies.py       # Carregamento modelo
+│   │   └── schemas.py            # Request/Response models
+│   │
+│   ├── monitoring/
+│   │   ├── metrics.py            # Cálculo de métricas
+│   │   └── drift.py              # Detecção de drift
+│   │
+│   └── utils/
+│       ├── database.py           # Conexão PostgreSQL
+│       ├── s3_client.py          # Cliente AWS S3
+│       └── logger.py             # Configuração de logs
+│
+├── airflow/
+│   └── dags/
+│       ├── etl_daily.py          # ETL PostgreSQL → S3
+│       ├── retrain_weekly.py    # Retreinamento semanal
+│       └── monitor_daily.py     # Monitoramento drift
+│
+├── streamlit_app/
+│   ├── app.py                    # App principal
+│   └── pages/
+│       ├── 1_📝_Cadastro.py     # Formulário
+│       ├── 2_📊_Dashboard.py    # Métricas
+│       └── 3_🔍_Histórico.py    # Predições anteriores
+│
+├── tests/
+│   ├── test_api.py               # Testes da API
+│   ├── test_model.py             # Testes do modelo
+│   └── test_data_pipeline.py    # Testes ETL
+│
+├── infra/
+│   ├── docker/
+│   │   ├── Dockerfile.api
+│   │   ├── Dockerfile.streamlit
+│   │   ├── Dockerfile.airflow
+│   │   └── Dockerfile.mlflow
+│   ├── docker-compose.yml
+│   └── sql/
+│       └── init.sql              # Criação de tabelas
+│
+├── .github/workflows/
+│   ├── ci.yml                    # Testes e linting
+│   └── cd.yml                    # Build Docker
+│
+├── .env.example
+├── requirements.txt
+└── README.md
 ```
 
 ## 💻 Como Executar o Projeto  
