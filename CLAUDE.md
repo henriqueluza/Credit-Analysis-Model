@@ -697,6 +697,20 @@ Quando terminar a exploração inicial, me mostre suas descobertas!
 
 ---
 
+## 📓 Sistema de Anotações
+
+Quando eu pedir **"anota isso"** ou **"salva esse conceito"**, você deve adicionar um resumo estruturado no arquivo `prompts.md` com:
+
+- **Título** do conceito
+- **O que é** (explicação resumida)
+- **Por que usar** (benefícios)
+- **Exemplo prático** (código ou comando, se aplicável)
+- **Data** da anotação
+
+Isso me ajuda a criar um caderno de estudos organizado para revisão posterior.
+
+---
+
 ## 📌 Regras Importantes
 
 ### Sempre que eu pedir ajuda com código:
@@ -729,48 +743,47 @@ Quando terminar a exploração inicial, me mostre suas descobertas!
 ### FASE 1: Setup Inicial e Ambiente
 - [x] **1.1 Configuração do Repositório**
   - [x] Criar repositório no GitHub
-  - [ ] Configurar `.gitignore` (Python, dados, secrets)
+  - [x] Configurar `.gitignore` (Python, dados, secrets)
   - [x] Criar estrutura de pastas do projeto
   - [x] Configurar `README.md` inicial
   - [x] Criar arquivo `.env.example`
 
-- [ ] **1.2 Ambiente de Desenvolvimento**
-  - [ ] Instalar Python 3.10+
-  - [ ] Criar ambiente virtual (venv ou poetry)
-  - [ ] Configurar `requirements.txt` com dependências
-  - [ ] Testar imports básicos (pandas, sklearn, etc.)
+- [x] **1.2 Ambiente de Desenvolvimento**
+  - [x] Instalar Python 3.10+
+  - [x] Criar ambiente virtual (venv ou poetry)
+  - [x] Configurar `requirements.txt` com dependências
+  - [x] Testar imports básicos (pandas, sklearn, etc.)
 
-- [ ] **1.3 Download dos Dados**
-  - [ ] Criar conta no Kaggle (se não tiver)
-  - [ ] Baixar dataset "Give Me Some Credit"
-  - [ ] Salvar em `data/raw/`
-  - [ ] Verificar integridade do download
+- [x] **1.3 Download dos Dados**
+  - [x] Criar conta no Kaggle (se não tiver)
+  - [x] Baixar dataset "Give Me Some Credit"
+  - [x] Salvar em `data/raw/`
+  - [x] Verificar integridade do download
 
 ---
 
 ### FASE 2: Análise Exploratória de Dados (EDA)
-- [ ] **2.1 Notebook `01_eda.ipynb`**
-  - [ ] Carregar dados com pandas
-  - [ ] Verificar shape (linhas x colunas)
-  - [ ] Analisar tipos de dados (`df.info()`)
-  - [ ] Estatísticas descritivas (`df.describe()`)
+- [x] **2.1 Notebook `01_eda.ipynb`**
+  - [x] Carregar dados com pandas
+  - [x] Verificar shape (linhas x colunas)
+  - [x] Analisar tipos de dados (`df.info()`)
+  - [x] Estatísticas descritivas (`df.describe()`)
 
 - [ ] **2.2 Análise de Qualidade dos Dados**
-  - [ ] Identificar missing values por coluna
-  - [ ] Calcular percentual de missing por feature
-  - [ ] Detectar valores duplicados
+  - [x] Identificar missing values por coluna
+  - [x] Detectar valores duplicados
   - [ ] Identificar outliers (boxplots, IQR)
 
-- [ ] **2.3 Análise da Variável Target**
-  - [ ] Distribuição de classes (0 vs 1)
-  - [ ] Calcular taxa de desbalanceamento
-  - [ ] Visualizar com gráfico de barras
+- [x] **2.3 Análise da Variável Target**
+  - [x] Distribuição de classes (0 vs 1)
+  - [x] Calcular taxa de desbalanceamento
+  - [x] Visualizar com gráfico de barras
 
 - [ ] **2.4 Análise das Features**
-  - [ ] Histogramas de distribuição por feature
-  - [ ] Correlação entre features (heatmap)
-  - [ ] Correlação features vs target
-  - [ ] Identificar features mais importantes
+  - [x] Histogramas de distribuição por feature
+  - [x] Correlação entre features (heatmap)
+  - [x] Correlação features vs target
+  - [x] Identificar features mais importantes
 
 - [ ] **2.5 Documentação EDA**
   - [ ] Escrever insights descobertos
