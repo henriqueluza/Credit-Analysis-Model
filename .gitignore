@@ -1,0 +1,31 @@
+# Dados
+/data/
+
+# Arquivos do Claude
+.claude/
+CLAUDE.md
+
+# Variáveis de ambiente
+.env
+
+# Ambiente virtual
+.venv
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# DataSpell
+.idea/
+
+# Logs futuros
+*.log
+logs/
+
+# Testes
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Python
+__pycache__/
+*.py[cod]

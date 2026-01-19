@@ -693,7 +693,7 @@ print(df.isnull().sum())
 2. Por que missing values podem ser um problema para ML?
 
 Quando terminar a exploração inicial, me mostre suas descobertas!
-```
+
 
 ---
 
@@ -724,6 +724,433 @@ Quando terminar a exploração inicial, me mostre suas descobertas!
 
 ---
 
+## 📋 Checklist Completo do Projeto
+
+### FASE 1: Setup Inicial e Ambiente
+- [x] **1.1 Configuração do Repositório**
+  - [x] Criar repositório no GitHub
+  - [ ] Configurar `.gitignore` (Python, dados, secrets)
+  - [x] Criar estrutura de pastas do projeto
+  - [x] Configurar `README.md` inicial
+  - [x] Criar arquivo `.env.example`
+
+- [ ] **1.2 Ambiente de Desenvolvimento**
+  - [ ] Instalar Python 3.10+
+  - [ ] Criar ambiente virtual (venv ou poetry)
+  - [ ] Configurar `requirements.txt` com dependências
+  - [ ] Testar imports básicos (pandas, sklearn, etc.)
+
+- [ ] **1.3 Download dos Dados**
+  - [ ] Criar conta no Kaggle (se não tiver)
+  - [ ] Baixar dataset "Give Me Some Credit"
+  - [ ] Salvar em `data/raw/`
+  - [ ] Verificar integridade do download
+
+---
+
+### FASE 2: Análise Exploratória de Dados (EDA)
+- [ ] **2.1 Notebook `01_eda.ipynb`**
+  - [ ] Carregar dados com pandas
+  - [ ] Verificar shape (linhas x colunas)
+  - [ ] Analisar tipos de dados (`df.info()`)
+  - [ ] Estatísticas descritivas (`df.describe()`)
+
+- [ ] **2.2 Análise de Qualidade dos Dados**
+  - [ ] Identificar missing values por coluna
+  - [ ] Calcular percentual de missing por feature
+  - [ ] Detectar valores duplicados
+  - [ ] Identificar outliers (boxplots, IQR)
+
+- [ ] **2.3 Análise da Variável Target**
+  - [ ] Distribuição de classes (0 vs 1)
+  - [ ] Calcular taxa de desbalanceamento
+  - [ ] Visualizar com gráfico de barras
+
+- [ ] **2.4 Análise das Features**
+  - [ ] Histogramas de distribuição por feature
+  - [ ] Correlação entre features (heatmap)
+  - [ ] Correlação features vs target
+  - [ ] Identificar features mais importantes
+
+- [ ] **2.5 Documentação EDA**
+  - [ ] Escrever insights descobertos
+  - [ ] Listar problemas encontrados nos dados
+  - [ ] Definir estratégia de tratamento
+
+---
+
+### FASE 3: Feature Engineering e Pré-processamento
+- [ ] **3.1 Notebook `02_feature_engineering.ipynb`**
+  - [ ] Criar notebook de feature engineering
+  - [ ] Importar dados brutos
+
+- [ ] **3.2 Tratamento de Missing Values**
+  - [ ] Definir estratégia por feature (mediana, moda, etc.)
+  - [ ] Implementar imputação
+  - [ ] Validar que não há mais missing
+
+- [ ] **3.3 Tratamento de Outliers**
+  - [ ] Definir estratégia (capping, remoção, etc.)
+  - [ ] Implementar tratamento
+  - [ ] Validar distribuições após tratamento
+
+- [ ] **3.4 Criação de Novas Features**
+  - [ ] Features de razão (ex: dívida/renda)
+  - [ ] Features de agregação
+  - [ ] Binning de variáveis contínuas (se aplicável)
+  - [ ] Encoding de variáveis categóricas (se houver)
+
+- [ ] **3.5 Transformações**
+  - [ ] Transformação log para features assimétricas
+  - [ ] Normalização/Padronização (StandardScaler, MinMaxScaler)
+  - [ ] Documentar transformações aplicadas
+
+- [ ] **3.6 Exportar Dados Processados**
+  - [ ] Salvar dados limpos em `data/processed/`
+  - [ ] Salvar features em `data/features/`
+  - [ ] Criar `src/data/transform.py` com funções reutilizáveis
+
+---
+
+### FASE 4: Modelagem - Baseline
+- [ ] **4.1 Notebook `03_baseline_models.ipynb`**
+  - [ ] Carregar dados processados
+  - [ ] Dividir em treino/teste (stratified)
+  - [ ] Definir métricas de avaliação
+
+- [ ] **4.2 Modelo Baseline Simples**
+  - [ ] Treinar Logistic Regression
+  - [ ] Avaliar métricas (Accuracy, Precision, Recall, F1, AUC-ROC)
+  - [ ] Analisar matriz de confusão
+  - [ ] Documentar resultados
+
+- [ ] **4.3 Modelos Baseline Avançados**
+  - [ ] Treinar Random Forest
+  - [ ] Treinar XGBoost
+  - [ ] Comparar performance dos modelos
+  - [ ] Selecionar melhor candidato
+
+- [ ] **4.4 Tratamento de Desbalanceamento**
+  - [ ] Entender SMOTE/ADASYN
+  - [ ] Implementar oversampling/undersampling
+  - [ ] Testar class_weight
+  - [ ] Comparar resultados com/sem balanceamento
+
+---
+
+### FASE 5: Otimização do Modelo
+- [ ] **5.1 Notebook `04_model_optimization.ipynb`**
+  - [ ] Definir espaço de busca de hiperparâmetros
+  - [ ] Configurar validação cruzada (Stratified K-Fold)
+
+- [ ] **5.2 Tuning de Hiperparâmetros**
+  - [ ] Implementar GridSearchCV ou RandomizedSearchCV
+  - [ ] OU configurar Optuna para tuning automático
+  - [ ] Encontrar melhores parâmetros
+  - [ ] Documentar configuração final
+
+- [ ] **5.3 Validação do Modelo Final**
+  - [ ] Treinar modelo com melhores parâmetros
+  - [ ] Avaliar no conjunto de teste
+  - [ ] Verificar se atingiu F1-Score >= 0.80
+  - [ ] Analisar curva ROC e Precision-Recall
+  - [ ] Interpretar feature importance
+
+- [ ] **5.4 Criar Pipeline de Treinamento**
+  - [ ] Implementar `src/models/train.py`
+  - [ ] Implementar `src/models/evaluate.py`
+  - [ ] Implementar `src/models/predict.py`
+  - [ ] Garantir reprodutibilidade (seeds)
+
+---
+
+### FASE 6: MLflow - Tracking e Registry
+- [ ] **6.1 Setup MLflow**
+  - [ ] Instalar MLflow
+  - [ ] Configurar tracking server (local primeiro)
+  - [ ] Entender conceitos (experiments, runs, artifacts)
+
+- [ ] **6.2 Experiment Tracking**
+  - [ ] Logar hiperparâmetros
+  - [ ] Logar métricas de avaliação
+  - [ ] Logar artefatos (modelo, gráficos)
+  - [ ] Comparar diferentes runs
+
+- [ ] **6.3 Model Registry**
+  - [ ] Registrar modelo no registry
+  - [ ] Criar versões do modelo
+  - [ ] Promover modelo para Staging
+  - [ ] Promover modelo para Production
+  - [ ] Implementar `src/models/registry.py`
+
+- [ ] **6.4 Dockerfile MLflow**
+  - [ ] Criar `infra/docker/Dockerfile.mlflow`
+  - [ ] Testar container localmente
+
+---
+
+### FASE 7: PostgreSQL - Banco de Dados
+- [ ] **7.1 Setup PostgreSQL**
+  - [ ] Instalar PostgreSQL (ou usar Docker)
+  - [ ] Criar banco de dados do projeto
+  - [ ] Configurar usuário e permissões
+
+- [ ] **7.2 Schema do Banco**
+  - [ ] Criar `infra/sql/init.sql`
+  - [ ] Criar tabela `clients`
+  - [ ] Criar tabela `predictions`
+  - [ ] Criar tabela `model_metrics`
+  - [ ] Criar tabela `drift_monitoring`
+  - [ ] Definir índices para performance
+
+- [ ] **7.3 Conexão via Python**
+  - [ ] Implementar `src/utils/database.py`
+  - [ ] Configurar connection pool
+  - [ ] Criar funções de CRUD básico
+  - [ ] Testar conexão
+
+---
+
+### FASE 8: FastAPI - API REST
+- [ ] **8.1 Setup FastAPI**
+  - [ ] Criar `src/api/main.py`
+  - [ ] Configurar CORS
+  - [ ] Implementar health check (`GET /health`)
+
+- [ ] **8.2 Schemas Pydantic**
+  - [ ] Criar `src/api/schemas.py`
+  - [ ] Definir `ClientInput` (request)
+  - [ ] Definir `PredictionResponse` (response)
+  - [ ] Adicionar validações
+
+- [ ] **8.3 Endpoints**
+  - [ ] Criar `src/api/routes.py`
+  - [ ] Implementar `POST /predict`
+  - [ ] Implementar `GET /metrics`
+  - [ ] Implementar `GET /predictions/{id}`
+
+- [ ] **8.4 Integração com Modelo**
+  - [ ] Criar `src/api/dependencies.py`
+  - [ ] Carregar modelo do MLflow
+  - [ ] Implementar cache do modelo
+  - [ ] Testar predições via API
+
+- [ ] **8.5 Integração com PostgreSQL**
+  - [ ] Salvar clientes no banco
+  - [ ] Salvar predições no banco
+  - [ ] Testar fluxo completo
+
+- [ ] **8.6 Documentação e Testes**
+  - [ ] Verificar Swagger UI (`/docs`)
+  - [ ] Testar endpoints com curl/Postman
+  - [ ] Criar `infra/docker/Dockerfile.api`
+
+---
+
+### FASE 9: Streamlit - Interface Web
+- [ ] **9.1 Setup Streamlit**
+  - [ ] Criar `streamlit_app/app.py`
+  - [ ] Configurar layout principal
+  - [ ] Criar navegação entre páginas
+
+- [ ] **9.2 Página de Cadastro**
+  - [ ] Criar `streamlit_app/pages/1_📝_Cadastro.py`
+  - [ ] Implementar formulário com todas as features
+  - [ ] Validar inputs do usuário
+  - [ ] Integrar com API FastAPI
+  - [ ] Exibir resultado da predição
+
+- [ ] **9.3 Página de Dashboard**
+  - [ ] Criar `streamlit_app/pages/2_📊_Dashboard.py`
+  - [ ] Exibir métricas do modelo atual
+  - [ ] Gráficos de performance
+  - [ ] Histórico de métricas ao longo do tempo
+
+- [ ] **9.4 Página de Histórico**
+  - [ ] Criar `streamlit_app/pages/3_🔍_Histórico.py`
+  - [ ] Listar predições anteriores
+  - [ ] Filtros de busca
+  - [ ] Detalhes de cada predição
+
+- [ ] **9.5 Dockerfile Streamlit**
+  - [ ] Criar `infra/docker/Dockerfile.streamlit`
+  - [ ] Testar container localmente
+
+---
+
+### FASE 10: AWS S3 - Data Lake
+- [ ] **10.1 Setup AWS**
+  - [ ] Criar conta AWS (se não tiver)
+  - [ ] Configurar credenciais (AWS CLI)
+  - [ ] Criar bucket S3 para o projeto
+
+- [ ] **10.2 Estrutura Medallion**
+  - [ ] Criar pasta `bronze/` (dados brutos)
+  - [ ] Criar pasta `silver/` (dados limpos)
+  - [ ] Criar pasta `gold/` (features prontas)
+  - [ ] Definir esquema de particionamento
+
+- [ ] **10.3 Cliente S3**
+  - [ ] Implementar `src/utils/s3_client.py`
+  - [ ] Função de upload
+  - [ ] Função de download
+  - [ ] Função de listagem
+
+- [ ] **10.4 Pipeline de Dados**
+  - [ ] Implementar `src/data/extract.py`
+  - [ ] Implementar `src/data/load.py`
+  - [ ] Upload dados para bronze
+  - [ ] Processar para silver
+  - [ ] Gerar features em gold
+
+---
+
+### FASE 11: Airflow - Orquestração
+- [ ] **11.1 Setup Airflow**
+  - [ ] Instalar Airflow
+  - [ ] Inicializar banco de dados Airflow
+  - [ ] Configurar webserver e scheduler
+
+- [ ] **11.2 DAG ETL Diário**
+  - [ ] Criar `airflow/dags/etl_daily.py`
+  - [ ] Task: extrair dados do PostgreSQL
+  - [ ] Task: transformar dados
+  - [ ] Task: carregar no S3
+
+- [ ] **11.3 DAG Retreinamento Semanal**
+  - [ ] Criar `airflow/dags/retrain_weekly.py`
+  - [ ] Task: carregar dados do S3 (gold)
+  - [ ] Task: treinar novo modelo
+  - [ ] Task: avaliar métricas
+  - [ ] Task: registrar no MLflow
+  - [ ] Task: promover se melhorar
+
+- [ ] **11.4 DAG Monitoramento Diário**
+  - [ ] Criar `airflow/dags/monitor_daily.py`
+  - [ ] Implementar `src/monitoring/drift.py`
+  - [ ] Implementar `src/monitoring/metrics.py`
+  - [ ] Task: detectar data drift
+  - [ ] Task: calcular métricas de produção
+  - [ ] Task: alertar se necessário
+
+- [ ] **11.5 Dockerfile Airflow**
+  - [ ] Criar `infra/docker/Dockerfile.airflow`
+  - [ ] Testar DAGs localmente
+
+---
+
+### FASE 12: Docker Compose - Integração
+- [ ] **12.1 Docker Compose**
+  - [ ] Criar `infra/docker-compose.yml`
+  - [ ] Configurar serviço PostgreSQL
+  - [ ] Configurar serviço MLflow
+  - [ ] Configurar serviço FastAPI
+  - [ ] Configurar serviço Streamlit
+  - [ ] Configurar serviço Airflow
+  - [ ] Configurar rede entre serviços
+
+- [ ] **12.2 Variáveis de Ambiente**
+  - [ ] Criar `.env.example` completo
+  - [ ] Configurar secrets de forma segura
+  - [ ] Testar todas as conexões
+
+- [ ] **12.3 Teste de Integração**
+  - [ ] Subir todos os serviços (`docker-compose up`)
+  - [ ] Testar fluxo completo end-to-end
+  - [ ] Verificar logs de cada serviço
+  - [ ] Documentar processo de deploy
+
+---
+
+### FASE 13: Testes Automatizados
+- [ ] **13.1 Setup Pytest**
+  - [ ] Configurar pytest
+  - [ ] Criar estrutura de testes
+  - [ ] Configurar fixtures
+
+- [ ] **13.2 Testes Unitários**
+  - [ ] Criar `tests/test_data_pipeline.py`
+  - [ ] Criar `tests/test_model.py`
+  - [ ] Criar `tests/test_api.py`
+  - [ ] Testar funções de transformação
+  - [ ] Testar predições do modelo
+  - [ ] Testar endpoints da API
+
+- [ ] **13.3 Testes de Integração**
+  - [ ] Testar fluxo completo de predição
+  - [ ] Testar integração API + Banco
+  - [ ] Testar integração API + Modelo
+
+- [ ] **13.4 Coverage**
+  - [ ] Configurar pytest-cov
+  - [ ] Gerar relatório de cobertura
+  - [ ] Atingir cobertura mínima (ex: 80%)
+
+---
+
+### FASE 14: CI/CD - GitHub Actions
+- [ ] **14.1 Workflow de CI**
+  - [ ] Criar `.github/workflows/ci.yml`
+  - [ ] Step: checkout do código
+  - [ ] Step: setup Python
+  - [ ] Step: instalar dependências
+  - [ ] Step: rodar linting (flake8, black)
+  - [ ] Step: rodar testes
+  - [ ] Step: gerar relatório de coverage
+
+- [ ] **14.2 Workflow de CD**
+  - [ ] Criar `.github/workflows/cd.yml`
+  - [ ] Step: build das imagens Docker
+  - [ ] Step: push para Docker Hub/ECR
+  - [ ] Step: deploy (se aplicável)
+
+- [ ] **14.3 Branch Protection**
+  - [ ] Configurar proteção na branch main
+  - [ ] Exigir CI passar antes de merge
+  - [ ] Configurar code review obrigatório
+
+---
+
+### FASE 15: Documentação Final
+- [ ] **15.1 README.md**
+  - [ ] Descrição do projeto
+  - [ ] Arquitetura do sistema
+  - [ ] Como rodar localmente
+  - [ ] Como contribuir
+  - [ ] Screenshots/GIFs
+
+- [ ] **15.2 Documentação Técnica**
+  - [ ] Documentar API (endpoints, schemas)
+  - [ ] Documentar modelo (features, métricas)
+  - [ ] Documentar pipelines (ETL, retreinamento)
+
+- [ ] **15.3 Retrospectiva**
+  - [ ] Listar aprendizados do projeto
+  - [ ] Documentar desafios e soluções
+  - [ ] Identificar melhorias futuras
+
+---
+
+### FASE 16: Validação Final
+- [ ] **16.1 Checklist de Qualidade**
+  - [ ] F1-Score >= 0.80 atingido
+  - [ ] Todos os testes passando
+  - [ ] CI/CD funcionando
+  - [ ] Documentação completa
+  - [ ] Código limpo e organizado
+
+- [ ] **16.2 Demo do Sistema**
+  - [ ] Gravar demo do fluxo completo
+  - [ ] Preparar apresentação do projeto
+  - [ ] Revisar portfólio GitHub
+
+- [ ] **16.3 Aprendizado**
+  - [ ] Consegue explicar cada componente
+  - [ ] Entende decisões de arquitetura
+  - [ ] Preparado para entrevistas técnicas
+
+---
+
 ## 🎯 Meta Final
 
 Ao final deste projeto, eu devo:
@@ -748,5 +1175,5 @@ Agora que você entende como me ajudar, vamos começar o projeto!
 
 ---
 
-**Última atualização**: 2025-01-18
-**Versão**: 1.0
+**Última atualização**: 2026-01-18
+**Versão**: 1.1
