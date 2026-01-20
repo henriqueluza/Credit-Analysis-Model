@@ -804,21 +804,21 @@ Isso me ajuda a criar um caderno de estudos organizado para revisão posterior.
   - [x] Implementar tratamento
   - [x] Validar distribuições após tratamento
 
-- [ ] **3.4 Criação de Novas Features**
-  - [ ] Features de razão (ex: dívida/renda)
-  - [ ] Features de agregação
-  - [ ] Binning de variáveis contínuas (se aplicável)
-  - [ ] Encoding de variáveis categóricas (se houver)
+- [x] **3.4 Criação de Novas Features**
+  - [x] Features de razão (ex: dívida/renda)
+  - [x] Features de agregação
+  - [x] Binning de variáveis contínuas (se aplicável)
+  - [x] Encoding de variáveis categóricas (se houver)
 
 - [ ] **3.5 Transformações**
   - [ ] Transformação log para features assimétricas
   - [ ] Normalização/Padronização (StandardScaler, MinMaxScaler)
   - [ ] Documentar transformações aplicadas
 
-- [ ] **3.6 Exportar Dados Processados**
-  - [ ] Salvar dados limpos em `data/processed/`
-  - [ ] Salvar features em `data/features/`
-  - [ ] Criar `src/data/transform.py` com funções reutilizáveis
+- [x] **3.6 Exportar Dados Processados**
+  - [x] Salvar dados limpos em `data/processed/`
+  - [x] Salvar features em `data/features/`
+  - [x] Criar `src/data/transform.py` com funções reutilizáveis
 
 ---
 
