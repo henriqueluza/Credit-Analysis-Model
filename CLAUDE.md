@@ -769,43 +769,40 @@ Isso me ajuda a criar um caderno de estudos organizado para revisão posterior.
   - [x] Analisar tipos de dados (`df.info()`)
   - [x] Estatísticas descritivas (`df.describe()`)
 
-- [ ] **2.2 Análise de Qualidade dos Dados**
+- [x] **2.2 Análise de Qualidade dos Dados**
   - [x] Identificar missing values por coluna
   - [x] Detectar valores duplicados
-  - [ ] Identificar outliers (boxplots, IQR)
+  - [x] Tratar missing values
+  - [x] Verificar se ainda há algum valor ausente
+  - [x] Identificar outliers (boxplots, IQR)
 
 - [x] **2.3 Análise da Variável Target**
   - [x] Distribuição de classes (0 vs 1)
   - [x] Calcular taxa de desbalanceamento
   - [x] Visualizar com gráfico de barras
 
-- [ ] **2.4 Análise das Features**
+- [x] **2.4 Análise das Features**
   - [x] Histogramas de distribuição por feature
   - [x] Correlação entre features (heatmap)
   - [x] Correlação features vs target
   - [x] Identificar features mais importantes
 
-- [ ] **2.5 Documentação EDA**
-  - [ ] Escrever insights descobertos
-  - [ ] Listar problemas encontrados nos dados
-  - [ ] Definir estratégia de tratamento
+- [x] **2.5 Documentação EDA**
+  - [x] Escrever insights descobertos
+  - [x] Listar problemas encontrados nos dados
+  - [x] Definir estratégia de tratamento
 
 ---
 
 ### FASE 3: Feature Engineering e Pré-processamento
-- [ ] **3.1 Notebook `02_feature_engineering.ipynb`**
-  - [ ] Criar notebook de feature engineering
-  - [ ] Importar dados brutos
+- [x] **3.1 Notebook `02_feature_engineering.ipynb`**
+  - [x] Criar notebook de feature engineering
+  - [x] Importar dados brutos
 
-- [ ] **3.2 Tratamento de Missing Values**
-  - [ ] Definir estratégia por feature (mediana, moda, etc.)
-  - [ ] Implementar imputação
-  - [ ] Validar que não há mais missing
-
-- [ ] **3.3 Tratamento de Outliers**
-  - [ ] Definir estratégia (capping, remoção, etc.)
-  - [ ] Implementar tratamento
-  - [ ] Validar distribuições após tratamento
+- [x] **3.3 Tratamento de Outliers**
+  - [x] Definir estratégia (capping, remoção, etc.)
+  - [x] Implementar tratamento
+  - [x] Validar distribuições após tratamento
 
 - [ ] **3.4 Criação de Novas Features**
   - [ ] Features de razão (ex: dívida/renda)
