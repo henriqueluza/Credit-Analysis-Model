@@ -810,9 +810,9 @@ Isso me ajuda a criar um caderno de estudos organizado para revisão posterior.
   - [x] Encoding de variáveis categóricas (se houver)
 
 - [ ] **3.5 Transformações** - Fazer depois, na fase 4
-  - [ ] Transformação log para features assimétricas
-  - [ ] Normalização/Padronização (StandardScaler, MinMaxScaler)
-  - [ ] Documentar transformações aplicadas
+  - [] Transformação log para features assimétricas
+  - [x] Normalização/Padronização (StandardScaler, MinMaxScaler)
+  - [x] Documentar transformações aplicadas
 
 - [x] **3.6 Exportar Dados Processados**
   - [x] Salvar dados limpos em `data/processed/`
@@ -827,21 +827,21 @@ Isso me ajuda a criar um caderno de estudos organizado para revisão posterior.
   - [x] Dividir em treino/teste (stratified)
   - [x] Definir métricas de avaliação
 
-- [ ] **4.2 Modelo Baseline Simples**
+- [x] **4.2 Modelo Baseline Simples**
   - [x] Treinar Logistic Regression
   - [x] Avaliar métricas (Accuracy, Precision, Recall, F1, AUC-ROC)
   - [x] Analisar matriz de confusão
-  - [ ] Documentar resultados
+  - [x] Documentar resultados
 
-- [ ] **4.3 Modelos Baseline Avançados**
-  - [ ] Treinar Random Forest
-  - [ ] Treinar XGBoost
-  - [ ] Comparar performance dos modelos
-  - [ ] Selecionar melhor candidato
+- [x] **4.3 Modelos Baseline Avançados**
+  - [x] Treinar Random Forest
+  - [x] Treinar XGBoost
+  - [x] Comparar performance dos modelos
+  - [x] Selecionar melhor candidato
 
 - [ ] **4.4 Tratamento de Desbalanceamento**
-  - [ ] Entender SMOTE/ADASYN
-  - [ ] Implementar oversampling/undersampling
+  - [x] Entender SMOTE/ADASYN
+  - [x] Implementar oversampling/undersampling
   - [ ] Testar class_weight
   - [ ] Comparar resultados com/sem balanceamento
 
