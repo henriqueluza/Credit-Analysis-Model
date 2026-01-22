@@ -415,7 +415,6 @@ Agora complete a função:
 Quando terminar, me mostre o código e vamos discutir:
 1. Como melhorar o F1-Score para chegar perto de 0.80
 2. Como registrar o modelo no MLflow Model Registry
-```
 
 ---
 
@@ -810,7 +809,7 @@ Isso me ajuda a criar um caderno de estudos organizado para revisão posterior.
   - [x] Binning de variáveis contínuas (se aplicável)
   - [x] Encoding de variáveis categóricas (se houver)
 
-- [ ] **3.5 Transformações**
+- [ ] **3.5 Transformações** - Fazer depois, na fase 4
   - [ ] Transformação log para features assimétricas
   - [ ] Normalização/Padronização (StandardScaler, MinMaxScaler)
   - [ ] Documentar transformações aplicadas

@@ -3,7 +3,7 @@
 
 # Arquivos do Claude
 .claude/
-CLAUDE.md
+*CLAUDE.md
 
 # Variáveis de ambiente
 .env
