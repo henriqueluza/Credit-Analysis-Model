@@ -822,15 +822,15 @@ Isso me ajuda a criar um caderno de estudos organizado para revisão posterior.
 ---
 
 ### FASE 4: Modelagem - Baseline
-- [ ] **4.1 Notebook `03_baseline_models.ipynb`**
-  - [ ] Carregar dados processados
-  - [ ] Dividir em treino/teste (stratified)
-  - [ ] Definir métricas de avaliação
+- [x] **4.1 Notebook `03_baseline_models.ipynb`**
+  - [x] Carregar dados processados
+  - [x] Dividir em treino/teste (stratified)
+  - [x] Definir métricas de avaliação
 
 - [ ] **4.2 Modelo Baseline Simples**
-  - [ ] Treinar Logistic Regression
-  - [ ] Avaliar métricas (Accuracy, Precision, Recall, F1, AUC-ROC)
-  - [ ] Analisar matriz de confusão
+  - [x] Treinar Logistic Regression
+  - [x] Avaliar métricas (Accuracy, Precision, Recall, F1, AUC-ROC)
+  - [x] Analisar matriz de confusão
   - [ ] Documentar resultados
 
 - [ ] **4.3 Modelos Baseline Avançados**
