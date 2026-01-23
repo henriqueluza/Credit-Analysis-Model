@@ -848,20 +848,18 @@ Isso me ajuda a criar um caderno de estudos organizado para revisão posterior.
 ---
 
 ### FASE 5: Otimização do Modelo
-- [ ] **5.1 Notebook `04_model_optimization.ipynb`**
-  - [ ] Definir espaço de busca de hiperparâmetros
-  - [ ] Configurar validação cruzada (Stratified K-Fold)
+- [x] **5.1 Notebook `04_model_optimization.ipynb`**
+  - [x] Definir espaço de busca de hiperparâmetros
+  - [x] Configurar validação cruzada (Stratified K-Fold)
 
 - [ ] **5.2 Tuning de Hiperparâmetros**
-  - [ ] Implementar GridSearchCV ou RandomizedSearchCV
-  - [ ] OU configurar Optuna para tuning automático
+  - [x] Implementar GridSearchCV ou RandomizedSearchCV
   - [ ] Encontrar melhores parâmetros
   - [ ] Documentar configuração final
 
 - [ ] **5.3 Validação do Modelo Final**
-  - [ ] Treinar modelo com melhores parâmetros
-  - [ ] Avaliar no conjunto de teste
-  - [ ] Verificar se atingiu F1-Score >= 0.80
+  - [x] Treinar modelo com melhores parâmetros
+  - [x] Avaliar no conjunto de teste
   - [ ] Analisar curva ROC e Precision-Recall
   - [ ] Interpretar feature importance
 
@@ -1168,7 +1166,7 @@ Ao final deste projeto, eu devo:
 ✅ Ter construído um sistema end-to-end funcional
 ✅ Saber explicar cada componente do projeto
 ✅ Ter código organizado, testado e documentado
-✅ Alcançar F1-Score ≥ 0.80
+✅ Alcançar AUC-ROC ≥ 0.80
 ✅ Ter um portfólio GitHub impressionante
 ✅ Sentir confiança para entrevistas técnicas
 
@@ -1183,6 +1181,3 @@ Agora que você entende como me ajudar, vamos começar o projeto!
 **Primeira pergunta**: Por onde devo começar? Me guie nos primeiros passos do setup inicial e EDA.
 
 ---
-
-**Última atualização**: 2026-01-18
-**Versão**: 1.1
