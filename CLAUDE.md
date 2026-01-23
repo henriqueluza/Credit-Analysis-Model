@@ -809,8 +809,8 @@ Isso me ajuda a criar um caderno de estudos organizado para revisão posterior.
   - [x] Binning de variáveis contínuas (se aplicável)
   - [x] Encoding de variáveis categóricas (se houver)
 
-- [ ] **3.5 Transformações** - Fazer depois, na fase 4
-  - [] Transformação log para features assimétricas
+- [x] **3.5 Transformações** - Fazer depois, na fase 4
+  - [x] Transformação log para features assimétricas
   - [x] Normalização/Padronização (StandardScaler, MinMaxScaler)
   - [x] Documentar transformações aplicadas
 
@@ -839,11 +839,11 @@ Isso me ajuda a criar um caderno de estudos organizado para revisão posterior.
   - [x] Comparar performance dos modelos
   - [x] Selecionar melhor candidato
 
-- [ ] **4.4 Tratamento de Desbalanceamento**
+- [x] **4.4 Tratamento de Desbalanceamento**
   - [x] Entender SMOTE/ADASYN
   - [x] Implementar oversampling/undersampling
-  - [ ] Testar class_weight
-  - [ ] Comparar resultados com/sem balanceamento
+  - [x] Testar class_weight
+  - [x] Comparar resultados com/sem balanceamento
 
 ---
 
