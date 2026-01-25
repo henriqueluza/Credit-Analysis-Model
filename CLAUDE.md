@@ -852,16 +852,16 @@ Isso me ajuda a criar um caderno de estudos organizado para revisão posterior.
   - [x] Definir espaço de busca de hiperparâmetros
   - [x] Configurar validação cruzada (Stratified K-Fold)
 
-- [ ] **5.2 Tuning de Hiperparâmetros**
+- [] **5.2 Tuning de Hiperparâmetros**
   - [x] Implementar GridSearchCV ou RandomizedSearchCV
-  - [ ] Encontrar melhores parâmetros
-  - [ ] Documentar configuração final
+  - [x] Encontrar melhores parâmetros
+  - [] Documentar configuração final
 
-- [ ] **5.3 Validação do Modelo Final**
+- [x] **5.3 Validação do Modelo Final**
   - [x] Treinar modelo com melhores parâmetros
   - [x] Avaliar no conjunto de teste
-  - [ ] Analisar curva ROC e Precision-Recall
-  - [ ] Interpretar feature importance
+  - [x] Analisar curva ROC e Precision-Recall
+  - [x] Interpretar feature importance
 
 - [ ] **5.4 Criar Pipeline de Treinamento**
   - [ ] Implementar `src/models/train.py`
