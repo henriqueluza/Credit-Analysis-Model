@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 class ClientInput(BaseModel):
-    renda_mensal: float = Field(ge=0, description="Quanto o cliente ganha por mês")
+    renda_mensal: float = Field(ge=0, description="Quanto o cliente ganh por mês")
     tem_atraso_grave: bool = Field(description="Teve algum atraso grave (Maior que 90 dias)?")
     total_atrasos: int = Field(ge=0, description="Quantas vezes atrasou o pagamento do cartão de crédito?")
     idade: int = Field(ge=18, description='Idade') # maior que 18
