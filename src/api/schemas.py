@@ -13,8 +13,8 @@ class ClientInput(BaseModel):
     emprestimos_imobiliarios: int = Field(ge=0, description="Quantos empréstimos imobiliários o cliente possui?")
 
 class PredictionResponse(BaseModel):
-    client_id: int
-    prediction: int
-    resultado: str
-    probability: float
-    model_version: str
+    client_id: int = Field(description='ID do Cliente')
+    prediction: int = Field(description='0 ou 1')
+    resultado: str = Field(description='Aprovado ou recusado')
+    probability: float = Field(description='Probabilidade de não pagar')
+    model_version: str = Field(description='Versão do modelo utilizado para faze a previsão')
