@@ -7,11 +7,14 @@ class ClientInput(BaseModel):
     idade: int = Field(ge=18) # maior que 18
     limite: float = Field(gt=0)
     uso_limite: float = Field(ge=0)
-    uso_credito_rotativo: #
     divida: float = Field(ge=0)# para calcular a razao_divida_renda
     num_dependentes: int = Field(ge=0) # positivo
     linhas_credito_abertas: int = Field(ge=0)
     emprestimos_imobiliarios: int = Field(ge=0)
 
 class PredictionResponse(BaseModel):
-    pass
+    client_id: int
+    prediction: int
+    resultado: str
+    probability: float
+    model_version: str
