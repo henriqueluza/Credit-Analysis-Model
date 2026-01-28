@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from src.api.schemas import ClientInput, PredictionResponse
+from src.api.dependencies import get_model, get_scaler, transform_input
+import numpy as np
 
 app = FastAPI(
     title='Modelo de Risco de Crédito',
@@ -18,3 +21,26 @@ app.add_middleware(
 @app.get('/health')
 def health_check():
     return {'status': 'OK'}
+
+@app.post('/predict', response_model=PredictionResponse)
+def predict(client: ClientInput):
+    features = transform_input(client)
+
+    # scaler
+    features_array = np.array([features])
+    scaler = get_scaler()
+    features_scaled = scaler.transform(features_array)
+
+    # predição
+    model = get_model()
+    prediction = model.predict(features_scaled)[0]
+    probability = model.predict_proba(features_scaled)[0][1]
+    resultado = "Reprovado" if prediction == 1 else 'Aprovado'
+
+    return PredictionResponse(
+        client_id=0,
+        prediction=prediction,
+        resultado=resultado,
+        probability=probability,
+        model_version='0.1.0'
+    )
