@@ -27,6 +27,21 @@ def health_check():
 def predict(client: ClientInput):
     features = transform_input(client)
 
+    features_dict = {
+        "log_renda_mensal":float(features[0]),
+        "tem_atraso_grave":int(features[1]),
+        "total_atrasos":int(features[2]),
+        "idade":int(features[3]),
+        "uso_credito_rotativo":float(features[4]),
+        "razao_divida_renda":float(features[5]),
+        "razao_extrema":float(features[6]),
+        "num_dependentes":int(features[7]),
+        "linhas_credito_abertas":int(features[8]),
+        "emprestimos_imobiliarios":int(features[9])
+    }
+
+    client_id = insert_client(features_dict)
+
     # scaler
     features_array = np.array([features])
     scaler = get_scaler()
@@ -38,8 +53,10 @@ def predict(client: ClientInput):
     probability = model.predict_proba(features_scaled)[0][1]
     resultado = "Reprovado" if prediction == 1 else 'Aprovado'
 
+    insert_prediction(client_id, int(prediction), float(probability), '0.1.0')
+
     return PredictionResponse(
-        client_id=0,
+        client_id=client_id,
         prediction=prediction,
         resultado=resultado,
         probability=probability,

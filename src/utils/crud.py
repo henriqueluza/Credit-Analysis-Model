@@ -31,3 +31,16 @@ def insert_prediction(client_id: int, prediction: int, probability: float, model
         prediction_id = result.scalar()
 
     return prediction_id
+
+
+def get_prediction_by_id(prediction_id: int):
+    engine = get_engine()
+    query = text("""
+                SELECT id, client_id, prediction, probability, model_version, created_at
+                FROM predictions
+                WHERE id = :id
+    """)
+
+    with engine.connect() as conn:
+        result = conn.execute(query, {'id': prediction_id})
+        row = result.fetchone()
