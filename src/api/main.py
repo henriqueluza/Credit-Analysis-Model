@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.api.schemas import ClientInput, PredictionResponse
 from src.api.dependencies import get_model, get_scaler, transform_input
+from src.utils.crud import insert_client, insert_prediction
 import numpy as np
 
 app = FastAPI(
@@ -44,3 +45,8 @@ def predict(client: ClientInput):
         probability=probability,
         model_version='0.1.0'
     )
+
+# @app.get('/predictions/{id}', response_model=)
+
+# @app.get('/metrics', response_model=)
+
