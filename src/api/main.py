@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from src.api.schemas import ClientInput, PredictionResponse
 from src.api.dependencies import get_model, get_scaler, transform_input
-from src.utils.crud import insert_client, insert_prediction, get_prediction_by_id
+from src.utils.crud import insert_client, insert_prediction, get_prediction_by_id, get_predictions_by_id
 import numpy as np
 
 app = FastAPI(
@@ -78,6 +78,24 @@ def get_prediction(prediction_id: int):
         'model_version': row[4],
         'created_at': str(row[5])
     }
+
+@app.get('/clients/{client_id/predictions')
+def get_client_predictions(client_id: int):
+    rows = get_predictions_by_id(client_id)
+
+    predictions = []
+
+    for row in rows:
+        predictions.append({
+            'id': row[0],
+            'client_id': row[1],
+            'prediction': row[2],
+            'probability': row[3],
+            'model_version': row[4],
+            'created_at': str(row[5])
+        })
+
+    return predictions
 
 # @app.get('/metrics', response_model=)
 
