@@ -1,8 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from src.api.schemas import ClientInput, PredictionResponse
 from src.api.dependencies import get_model, get_scaler, transform_input
-from src.utils.crud import insert_client, insert_prediction
+from src.utils.crud import insert_client, insert_prediction, get_prediction_by_id
 import numpy as np
 
 app = FastAPI(
@@ -63,7 +63,21 @@ def predict(client: ClientInput):
         model_version='0.1.0'
     )
 
-# @app.get('/predictions/{id}', response_model=)
+@app.get('/predictions/{prediction_id}')
+def get_prediction(prediction_id: int):
+    row = get_prediction_by_id(prediction_id)
+
+    if row is None:
+        raise HTTPException(status_code=404, detail='Predição não encontrada')
+
+    return {
+        'id': row[0],
+        'client_id': row[1],
+        'prediction': row[2],
+        'probability': row[3],
+        'model_version': row[4],
+        'created_at': str(row[5])
+    }
 
 # @app.get('/metrics', response_model=)
 

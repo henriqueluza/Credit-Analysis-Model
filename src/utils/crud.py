@@ -44,3 +44,20 @@ def get_prediction_by_id(prediction_id: int):
     with engine.connect() as conn:
         result = conn.execute(query, {'id': prediction_id})
         row = result.fetchone()
+
+    return row
+
+def get_predictions_by_id(client_id: int):
+    engine = get_engine()
+    query = text("""
+    SELECT id, client_id, prediction, probability, model_version, created_at
+    FROM predictions
+    WHERE client_id = :client_id
+    ORDER BY created_at DESC
+    """)
+
+    with engine.connect() as conn:
+        result = conn.execute(query, {'client_id': client_id})
+        rows = result.fetchall()
+
+    return rows
