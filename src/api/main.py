@@ -79,7 +79,7 @@ def get_prediction(prediction_id: int):
         'created_at': str(row[5])
     }
 
-@app.get('/clients/{client_id/predictions')
+@app.get('/clients/{client_id}/predictions')
 def get_client_predictions(client_id: int):
     rows = get_predictions_by_id(client_id)
 
