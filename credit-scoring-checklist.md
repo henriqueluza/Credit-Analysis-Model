@@ -46,7 +46,7 @@
 - [x] Baixar dataset AmExpert CodeLab 2021
 - [x] Verificar integridade dos dados
 - [x] Criar notebook `01_data_acquisition.ipynb`
-- [ ] Documentar estrutura do dataset (colunas, tipos, tamanho)
+- [x] Documentar estrutura do dataset (colunas, tipos, tamanho)
 
 ### 1.3 Análise Exploratória (EDA)
 - [ ] Criar notebook `02_eda.ipynb`
