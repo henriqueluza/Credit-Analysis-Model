@@ -43,11 +43,9 @@
 - [x] Criar arquivos `__init__.py` em todos os módulos
 
 ### 1.2 Download e Exploração dos Dados
-- [ ] Configurar Kaggle API
-- [ ] Criar script `scripts/download_data.sh`
-- [ ] Baixar dataset AmExpert CodeLab 2021
-- [ ] Verificar integridade dos dados
-- [ ] Criar notebook `01_data_acquisition.ipynb`
+- [x] Baixar dataset AmExpert CodeLab 2021
+- [x] Verificar integridade dos dados
+- [x] Criar notebook `01_data_acquisition.ipynb`
 - [ ] Documentar estrutura do dataset (colunas, tipos, tamanho)
 
 ### 1.3 Análise Exploratória (EDA)
