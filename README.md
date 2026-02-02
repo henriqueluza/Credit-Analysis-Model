@@ -1,12 +1,12 @@
- # Credit-Analysis-Model
+# Credit-Analysis-Model
  
 ## 🏛️ Arquitetura do Projeto
 
 ## ⚙️ Stack Tecnológica
- 
+
 ## 📂 Estrutura do Projeto
  ```
-credit-risk-model/
+Credit-Analysis-Model/
 ```
 
 ## 💻 Como Executar o Projeto  

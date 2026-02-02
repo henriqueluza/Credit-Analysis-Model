@@ -13,33 +13,33 @@
 ## 📋 FASE 1: Fundação e Preparação de Dados
 
 ### 1.1 Configuração do Ambiente
-- [ ] Criar diretório raiz do projeto (`credit-scoring-system/`)
-- [ ] Criar estrutura de pastas:
-  - [ ] `.github/workflows/`
-  - [ ] `data/raw/`
-  - [ ] `data/processed/`
-  - [ ] `data/external/`
-  - [ ] `notebooks/`
-  - [ ] `src/data/`
-  - [ ] `src/features/`
-  - [ ] `src/models/`
-  - [ ] `src/api/`
-  - [ ] `src/dashboard/`
-  - [ ] `src/monitoring/`
-  - [ ] `src/utils/`
-  - [ ] `tests/`
-  - [ ] `monitoring/prometheus/`
-  - [ ] `monitoring/grafana/`
-  - [ ] `reports/figures/`
-  - [ ] `scripts/`
-  - [ ] `docker/`
-  - [ ] `mlruns/`
-- [ ] Criar ambiente virtual Python (`python -m venv venv`)
-- [ ] Criar `requirements.txt` com todas as dependências
+- [x] Criar diretório raiz do projeto (`Credit-Analysis-Model/`)
+- [x] Criar estrutura de pastas:
+  - [x] `.github/workflows/`
+  - [x] `data/raw/`
+  - [x] `data/processed/`
+  - [x] `data/external/`
+  - [x] `notebooks/`
+  - [x] `src/data/`
+  - [x] `src/features/`
+  - [x] `src/models/`
+  - [x] `src/api/`
+  - [x] `src/dashboard/`
+  - [x] `src/monitoring/`
+  - [x] `src/utils/`
+  - [x] `tests/`
+  - [x] `monitoring/prometheus/`
+  - [x] `monitoring/grafana/`
+  - [x] `reports/figures/`
+  - [x] `scripts/`
+  - [x] `docker/`
+  - [x] `mlruns/`
+- [x] Criar ambiente virtual Python (`python -m venv venv`)
+- [] Criar `requirements.txt` com todas as dependências
 - [ ] Instalar dependências (`pip install -r requirements.txt`)
-- [ ] Inicializar Git (`git init`)
-- [ ] Criar `.gitignore`
-- [ ] Criar `.env.example` com variáveis de ambiente
+- [x] Inicializar Git (`git init`)
+- [x] Criar `.gitignore`
+- [] Criar `.env.example` com variáveis de ambiente
 - [ ] Criar arquivos `__init__.py` em todos os módulos
 
 ### 1.2 Download e Exploração dos Dados
