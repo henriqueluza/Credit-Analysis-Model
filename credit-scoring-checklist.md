@@ -35,12 +35,12 @@
   - [x] `docker/`
   - [x] `mlruns/`
 - [x] Criar ambiente virtual Python (`python -m venv venv`)
-- [] Criar `requirements.txt` com todas as dependências
-- [ ] Instalar dependências (`pip install -r requirements.txt`)
+- [x] Criar `requirements.txt` com todas as dependências
+- [x] Instalar dependências (`pip install -r requirements.txt`)
 - [x] Inicializar Git (`git init`)
 - [x] Criar `.gitignore`
-- [] Criar `.env.example` com variáveis de ambiente
-- [ ] Criar arquivos `__init__.py` em todos os módulos
+- [x] Criar `.env.example` com variáveis de ambiente
+- [x] Criar arquivos `__init__.py` em todos os módulos
 
 ### 1.2 Download e Exploração dos Dados
 - [ ] Configurar Kaggle API

@@ -1,0 +1,277 @@
+# ============================================
+# CREDIT SCORING SYSTEM - GITIGNORE
+# ============================================
+
+# ============================================
+# PYTHON
+# ============================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ============================================
+# VIRTUAL ENVIRONMENTS
+# ============================================
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# ============================================
+# ENVIRONMENT VARIABLES
+# ============================================
+.env
+.env.local
+.env.*.local
+*.env
+
+# Manter o exemplo
+!.env.example
+
+# ============================================
+# DATA FILES
+# ============================================
+# Dados brutos (grandes demais para Git)
+data/raw/*
+!data/raw/.gitkeep
+
+# Dados externos
+data/external/*
+!data/external/.gitkeep
+
+# Arquivos de dados grandes
+*.csv
+*.parquet
+*.xlsx
+*.xls
+*.json
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+
+# Manter arquivos de configuração JSON
+!**/config*.json
+!**/settings*.json
+
+# ============================================
+# MLFLOW
+# ============================================
+mlruns/*
+!mlruns/.gitkeep
+mlartifacts/
+*.db
+
+# ============================================
+# DVC
+# ============================================
+# Arquivos de cache do DVC
+.dvc/cache/
+.dvc/tmp/
+.dvc/plots/
+
+# Arquivos .dvc (versionados pelo DVC, não pelo Git)
+# Descomente se não quiser versionar os arquivos .dvc
+# *.dvc
+
+# ============================================
+# MODELS
+# ============================================
+# Arquivos de modelo (grandes)
+*.joblib
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.onnx
+*.pt
+*.pth
+models/*
+!models/.gitkeep
+
+# ============================================
+# JUPYTER NOTEBOOKS
+# ============================================
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# Jupyter Notebook metadata
+*.ipynb_metadata
+
+# ============================================
+# IDE / EDITORS
+# ============================================
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# ============================================
+# OS FILES
+# ============================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ============================================
+# LOGS
+# ============================================
+logs/
+*.log
+*.log.*
+log.txt
+
+# ============================================
+# TESTING
+# ============================================
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+nosetests.xml
+
+# ============================================
+# DOCKER
+# ============================================
+# Ignore docker-compose override (local configs)
+docker-compose.override.yml
+
+# ============================================
+# REPORTS / OUTPUTS
+# ============================================
+# Relatórios gerados (podem ser grandes)
+reports/drift/*
+!reports/drift/.gitkeep
+
+# Manter figuras se quiser
+# reports/figures/*
+# !reports/figures/.gitkeep
+
+# ============================================
+# CACHE
+# ============================================
+.cache/
+*.cache
+.mypy_cache/
+.ruff_cache/
+
+# ============================================
+# SECRETS / CREDENTIALS
+# ============================================
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+credentials/
+*.credentials
+
+# Kaggle
+kaggle.json
+.kaggle/
+
+# AWS
+.aws/
+
+# ============================================
+# TEMPORARY FILES
+# ============================================
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# ============================================
+# MISC
+# ============================================
+# Arquivos de profile
+*.prof
+*.lprof
+
+# Cython
+cython_debug/
+
+# Documentação gerada
+docs/_build/
+site/
+
+# Teoria
+
+teoria
