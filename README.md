@@ -4,48 +4,48 @@
 
 ---
 
-## 🎯 Sobre o Projeto
+## Sobre o Projeto
 
 Sistema de análise de risco de crédito desenvolvido para auxiliar instituições financeiras na tomada de decisão sobre concessão de empréstimos. Utiliza um modelo de Machine Learning treinado com técnicas de classificação para prever a probabilidade de inadimplência de clientes.
 
 ### Principais Diferenciais
 
-- ✅ **Machine Learning**: Modelo de Regressão Logística com F2-score de 0.74
-- ✅ **API REST**: Backend robusto com FastAPI e documentação automática (Swagger)
-- ✅ **Interface Intuitiva**: Frontend interativo desenvolvido com Streamlit
-- ✅ **Persistência de Dados**: Banco PostgreSQL com histórico completo de análises
-- ✅ **Containerização**: Deploy facilitado com Docker Compose
-- ✅ **Boas Práticas**: Variáveis de ambiente, validação de dados, tratamento de erros
+-  **Machine Learning**: Modelo de Regressão Logística com F2-score de 0.74
+-  **API REST**: Backend robusto com FastAPI e documentação automática (Swagger)
+-  **Interface Intuitiva**: Frontend interativo desenvolvido com Streamlit
+-  **Persistência de Dados**: Banco PostgreSQL com histórico completo de análises
+-  **Containerização**: Deploy facilitado com Docker Compose
+-  **Boas Práticas**: Variáveis de ambiente, validação de dados, tratamento de erros
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-### 🔮 Análise de Crédito
+### Análise de Crédito
 - Avaliação de risco baseada em múltiplas variáveis (idade, renda, patrimônio, etc.)
 - Decisão automática de aprovação/reprovação com threshold otimizado
 - Cálculo de probabilidade de inadimplência
 
-### 📊 Dashboard e Histórico
+### Dashboard e Histórico
 - Visualização de todas as análises realizadas com filtros e paginação
 - Estatísticas gerais (taxa de aprovação, total de análises, etc.)
 - Busca de análises específicas por ID
 - Gráficos e métricas consolidadas
 
-### 🛠️ API REST
+### API REST
 - Documentação automática com Swagger UI
 - Endpoints RESTful para integração com outros sistemas
 - Validação automática de dados com Pydantic
 - Tratamento robusto de erros
 
-### 💾 Persistência
+###  Persistência
 - Armazenamento de todas as predições em PostgreSQL
 - Histórico completo com timestamps
 - Dados estruturados para análises futuras
 
 ---
 
-## 🚀 Tecnologias
+## Tecnologias
 
 ### Backend
 - **[FastAPI](https://fastapi.tiangolo.com/)** - Framework web moderno e rápido
@@ -70,7 +70,7 @@ Sistema de análise de risco de crédito desenvolvido para auxiliar instituiçõ
 
 ---
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 ```
 ┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
@@ -98,7 +98,7 @@ Sistema de análise de risco de crédito desenvolvido para auxiliar instituiçõ
 
 ---
 
-## 📦 Pré-requisitos
+## Pré-requisitos
 
 - **Python** 3.10 ou superior
 - **Docker** e **Docker Compose** (para PostgreSQL)
@@ -106,7 +106,7 @@ Sistema de análise de risco de crédito desenvolvido para auxiliar instituiçõ
 
 ---
 
-## 🔧 Instalação
+## Instalação
 
 ### 1. Clone o repositório
 
@@ -160,7 +160,7 @@ docker ps | grep postgres
 
 ---
 
-## 🎮 Como Usar
+## Como Usar
 
 ### Iniciar o Backend (API)
 
@@ -189,7 +189,7 @@ Abre automaticamente em: **http://localhost:8501**
 
 ---
 
-## 📡 API Endpoints
+##  API Endpoints
 
 ### POST `/predict`
 Realiza análise de crédito e retorna decisão
@@ -281,7 +281,7 @@ Credit-Analysis-Model/
 
 ---
 
-## 🧠 Modelo de Machine Learning
+## Modelo de Machine Learning
 
 ### Abordagem
 
