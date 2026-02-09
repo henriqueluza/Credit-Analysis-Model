@@ -252,7 +252,7 @@ Retorna estatísticas gerais
 
 ---
 
-## 📂 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 Credit-Analysis-Model/
