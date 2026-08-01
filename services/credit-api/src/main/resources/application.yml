@@ -15,3 +15,10 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+
+ml-service:
+  base-url: ${ML_SERVICE_URL:http://localhost:8000}
+
+app:
+  # Usuário de sistema usado como solicitante enquanto não há autenticação (etapa 5).
+  usuario-sistema-id: ${USUARIO_SISTEMA_ID:1}
