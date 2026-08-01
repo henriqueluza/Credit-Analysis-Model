@@ -177,3 +177,57 @@ Toda chamada Spring → FastAPI propaga o header `X-Request-Id` (gerado pelo Spr
 na entrada da requisição do cliente, ou recebido dele). O FastAPI inclui o mesmo
 valor em todo log estruturado da requisição, permitindo rastrear uma predição
 ponta a ponta (detalhado na etapa 6).
+
+## Camadas — Clean Architecture (ambos os serviços)
+
+Regra de dependência única, em ambos os serviços: **as camadas internas nunca
+conhecem as externas**. `domain` não importa nada de `application`, `infrastructure`
+ou `interface`. `application` só conhece `domain`. `infrastructure` e `interface`
+podem conhecer `application` e `domain`, nunca uma à outra diretamente — a
+composição (wiring) é feita por injeção de dependência na borda do framework.
+
+```
+interface  ──depends on──▶  application  ──depends on──▶  domain
+infrastructure ──implements ports defined in──▶  domain / application
+```
+
+### FastAPI (microsserviço de ML)
+
+- **`domain/`** — regras puras, sem nenhuma dependência de FastAPI/Pydantic/pandas
+  além do necessário para tipos. Contém:
+  - `FeaturesEmprestimo` (VO com os dados de entrada validados)
+  - `calcular_features_derivadas()` — a lógica hoje em `preparar_dados_modelo()`
+  - `decidir_resultado(probabilidade, threshold)` — a lógica de decisão hoje
+    inline em `predict_credit()`
+  - Interface (port) `ModeloPreditivo` — abstrai "algo que recebe features e
+    devolve uma probabilidade", implementado pela infraestrutura.
+- **`application/`** — `PredizerRiscoUseCase`: orquestra `domain` (calcula
+  features, chama a porta `ModeloPreditivo`, aplica a decisão de threshold) e
+  retorna um DTO de resultado. Não sabe nada de HTTP.
+- **`infrastructure/`** — `ModeloJoblibRepository` (implementa `ModeloPreditivo`
+  carregando o `.joblib`), leitura de metadados do modelo (versão, data de treino,
+  métricas), configuração/logging.
+- **`interface/`** — routers FastAPI (`/predict`, `/model-info`, `/health`),
+  schemas Pydantic de request/response, tratamento de exceções HTTP. É a única
+  camada que sabe o que é FastAPI.
+
+### Spring Boot (API principal)
+
+- **`domain/`** — `SolicitacaoEmprestimo`, `Cliente`, `ResultadoAnalise`,
+  `Usuario` e demais VOs/enums descritos acima, mais as portas (interfaces) que a
+  infraestrutura implementa: `SolicitacaoEmprestimoRepository`,
+  `UsuarioRepository`, `ModeloCreditoClient` (porta para o FastAPI). Sem
+  anotações JPA, sem Spring, sem nada de infraestrutura.
+- **`application/`** — casos de uso, um por operação de negócio:
+  `AnalisarCreditoUseCase` (monta `SolicitacaoEmprestimo`, chama
+  `ModeloCreditoClient`, persiste via `SolicitacaoEmprestimoRepository`),
+  `ListarHistoricoUseCase`, `ObterEstatisticasUseCase`,
+  `AutenticarUsuarioUseCase`, `RegistrarUsuarioUseCase`. Recebem e devolvem
+  objetos de domínio ou DTOs de aplicação — nunca entidades JPA nem DTOs de HTTP.
+- **`infrastructure/`** — `SolicitacaoEmprestimoJpaRepository` e
+  `UsuarioJpaRepository` (Spring Data JPA, implementando as portas do domínio via
+  adapters), `ModeloCreditoWebClient` (implementa `ModeloCreditoClient` chamando o
+  FastAPI via `WebClient`), configuração do JWT, configuração do Flyway/DataSource.
+- **`interface/`** (camada web) — `@RestController`s, DTOs de request/response
+  HTTP, `@ExceptionHandler`s, filtros de segurança (JWT). Traduz HTTP ↔ objetos de
+  aplicação/domínio e nada mais.
