@@ -231,3 +231,59 @@ infrastructure ──implements ports defined in──▶  domain / application
 - **`interface/`** (camada web) — `@RestController`s, DTOs de request/response
   HTTP, `@ExceptionHandler`s, filtros de segurança (JWT). Traduz HTTP ↔ objetos de
   aplicação/domínio e nada mais.
+
+## Contrato REST — Spring Boot → Frontend (React)
+
+Esta é a única API que o frontend consome; o FastAPI nunca é acessado diretamente
+pelo browser. Todas as rotas exceto `/auth/*` e `/health` exigem JWT válido
+(`Authorization: Bearer <token>`).
+
+### `POST /auth/register`
+Cria um usuário. Body: `{ "nome", "email", "senha" }`. Role padrão: `ANALISTA`
+(criação de `ADMIN` é feita apenas por outro `ADMIN`, protegida por role).
+Response `201`: `{ "id", "nome", "email", "role" }`.
+
+### `POST /auth/login`
+Body: `{ "email", "senha" }`.
+Response `200`: `{ "token", "tipo": "Bearer", "expiraEm": "2026-08-01T18:00:00Z" }`.
+Response `401`: credenciais inválidas.
+
+### `POST /api/analises`
+Cria e processa uma nova análise de crédito (chama o FastAPI internamente).
+Roles: `ANALISTA`, `ADMIN`.
+Body: os mesmos campos de `Cliente` + dados do empréstimo, em português, tal como
+hoje no `ClienteInput` do Streamlit/FastAPI (`idade`, `salarioAnual`,
+`situacaoMoradia`, `saldoContaCorrente`, `saldoContaPoupanca`, `valorEmprestimo`,
+`prazoMeses`).
+Response `201`: a `SolicitacaoEmprestimo` criada, incluindo `ResultadoAnalise`.
+Response `502`: FastAPI indisponível ou retornou erro.
+
+### `GET /api/analises`
+Lista paginada do histórico. Roles: `ANALISTA`, `ADMIN`.
+Query params: `page` (default 0), `size` (default 10, máx 100), `sort` (opcional).
+Response `200`: `{ "content": [...], "page", "size", "totalElements", "totalPages" }`
+— formato padrão `Page<T>` do Spring Data, substituindo o `{total, limit, skip}`
+ad-hoc de hoje.
+
+### `GET /api/analises/{id}`
+Detalhe de uma análise. Roles: `ANALISTA`, `ADMIN`. `404` se não encontrada.
+
+### `GET /api/analises/stats`
+Estatísticas agregadas (total, aprovados, reprovados, taxa de aprovação). Role:
+`ADMIN` (informação sensível de negócio, mais restrita que o histórico individual).
+
+### `GET /health`
+Público, sem autenticação — Spring Boot Actuator (`/actuator/health` exposto
+como `/health`, ou mapeado). Usado por orquestração/monitoramento.
+
+## Resumo das mudanças de contrato em relação ao sistema atual
+
+| Hoje (FastAPI monólito) | Alvo |
+|---|---|
+| `POST /predict` (público, sem auth) | `POST /api/analises` no Spring (com JWT) → Spring chama `POST /predict` no FastAPI internamente |
+| `GET /predictions` | `GET /api/analises` (paginação no formato `Page<T>`) |
+| `GET /predictions/{id}` | `GET /api/analises/{id}` |
+| `GET /predictions/stats` | `GET /api/analises/stats` (restrito a `ADMIN`) |
+| Sem autenticação | JWT obrigatório em todas as rotas de negócio |
+| Sem versionamento de modelo | `versaoModelo` em todo `ResultadoAnalise`, exposto via `GET /model-info` |
+| Sem `/health` | `/health` em ambos os serviços |
