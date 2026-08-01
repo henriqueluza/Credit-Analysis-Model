@@ -97,3 +97,83 @@ Atributos:
 - `senhaHash: String`
 - `role: Role` (enum VO: `ANALISTA`, `ADMIN`)
 - `criadoEm: Instant`
+
+## Contrato REST — Spring Boot → FastAPI (microsserviço de ML)
+
+### Decisão de design: o que significa "features já processadas"
+
+O FastAPI é rebaixado a um serviço stateless que só sabe fazer uma coisa: dado um
+perfil de cliente e um pedido de empréstimo, calcular a probabilidade de risco.
+Duas opções foram consideradas:
+
+1. Spring calcula toda a engenharia de atributos (log-transforms, razões,
+   one-hot encoding) e manda o vetor de features pronto para o modelo.
+2. Spring manda os dados **brutos, porém validados e tipados** do cliente/empréstimo,
+   e o FastAPI mantém a lógica de feature engineering na sua própria camada de
+   domínio (`domain/`, regra de negócio pura de ML).
+
+Optamos pela **opção 2**. Motivo: a etapa 3 exige que o microsserviço FastAPI tenha
+uma camada `domain/` com "regras puras de feature engineering e threshold" — ou seja,
+esse conhecimento (quais features derivar, como) é responsabilidade do subdomínio de
+ML, não do Spring Boot. "Features já processadas" significa que o Spring já fez
+**validação e tipagem** (não envia strings soltas nem valores fora de domínio) —
+mas o cálculo das features derivadas do modelo (`log_valor_emprestimo`,
+`comprometimento_renda`, etc.) continua sendo responsabilidade interna do FastAPI,
+igual é hoje em `preparar_dados_modelo()`. Isso mantém o contrato estável mesmo que
+o modelo troque de features no futuro — o Spring não precisa saber quais são.
+
+### `POST /predict`
+
+Request body:
+```json
+{
+  "idade": 35,
+  "salarioAnual": 60000.0,
+  "situacaoMoradia": "OWN",
+  "saldoContaCorrente": 1500.0,
+  "saldoContaPoupanca": 5000.0,
+  "valorEmprestimo": 10000.0,
+  "prazoMeses": 24
+}
+```
+
+Response body (200):
+```json
+{
+  "resultado": "APROVADO",
+  "probabilidadeRisco": 0.1234,
+  "thresholdUtilizado": 0.35,
+  "versaoModelo": "1.2.0"
+}
+```
+
+Erros:
+- `422` — payload inválido (mesmas invariantes já validadas no Spring, validadas de
+  novo aqui porque o FastAPI não deve confiar cegamente em quem o chama).
+- `503` — modelo ainda não carregado em memória.
+
+### `GET /model-info`
+
+Expõe os metadados de versionamento do modelo (etapa 3 — MLOps básico).
+
+Response body (200):
+```json
+{
+  "versaoModelo": "1.2.0",
+  "dataTreino": "2026-05-10",
+  "metricas": { "f2_score": 0.81, "auc_roc": 0.87 },
+  "features": ["idade", "log_valor_emprestimo", "..."]
+}
+```
+
+### `GET /health`
+
+Response body (200): `{ "status": "UP", "modeloCarregado": true }`.
+Response body (503): `{ "status": "DOWN", "modeloCarregado": false }`.
+
+### Propagação de request-id
+
+Toda chamada Spring → FastAPI propaga o header `X-Request-Id` (gerado pelo Spring
+na entrada da requisição do cliente, ou recebido dele). O FastAPI inclui o mesmo
+valor em todo log estruturado da requisição, permitindo rastrear uma predição
+ponta a ponta (detalhado na etapa 6).
