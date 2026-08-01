@@ -1,0 +1,8 @@
+{
+  "versao": "1.0.0",
+  "dataTreino": "2025-12-31",
+  "metricas": {
+    "f2_score": 0.7456140350615573,
+    "tipo_modelo": "Regressão Logística"
+  }
+}
