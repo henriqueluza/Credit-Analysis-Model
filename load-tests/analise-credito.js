@@ -4,7 +4,11 @@ import { Trend } from 'k6/metrics';
 
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:8080';
 const ADMIN_EMAIL = __ENV.ADMIN_EMAIL || 'admin@creditanalysis.local';
-const ADMIN_SENHA = __ENV.ADMIN_SENHA || 'admin123';
+const ADMIN_SENHA = __ENV.ADMIN_SENHA;
+
+if (!ADMIN_SENHA) {
+  throw new Error('Defina a variável de ambiente ADMIN_SENHA antes de rodar o teste (ex: k6 run -e ADMIN_SENHA=... analise-credito.js)');
+}
 
 const analiseDuration = new Trend('analise_duration', true);
 const historicoDuration = new Trend('historico_duration', true);
