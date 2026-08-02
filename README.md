@@ -1,332 +1,214 @@
-# Sistema de Análise de Crédito com Machine Learning
+# Sistema de Análise de Crédito
 
-> Sistema completo de análise de risco de crédito utilizando Machine Learning, API REST, interface web interativa e persistência de dados.
+> Sistema de análise de risco de crédito com arquitetura distribuída: API principal em Spring Boot, microsserviço de Machine Learning em FastAPI, frontend em React e persistência em PostgreSQL.
 
 ---
 
 ## Sobre o Projeto
 
-Sistema de análise de risco de crédito desenvolvido para auxiliar instituições financeiras na tomada de decisão sobre concessão de empréstimos. Utiliza um modelo de Machine Learning treinado com técnicas de classificação para prever a probabilidade de inadimplência de clientes.
+Sistema para apoiar a decisão de aprovação de crédito, combinando um modelo de Machine Learning (probabilidade de inadimplência) com regras de negócio, autenticação e histórico de análises.
 
-### Principais Diferenciais
-
--  **Machine Learning**: Modelo de Regressão Logística com F2-score de 0.74
--  **API REST**: Backend robusto com FastAPI e documentação automática (Swagger)
--  **Interface Intuitiva**: Frontend interativo desenvolvido com Streamlit
--  **Persistência de Dados**: Banco PostgreSQL com histórico completo de análises
--  **Containerização**: Deploy facilitado com Docker Compose
--  **Boas Práticas**: Variáveis de ambiente, validação de dados, tratamento de erros
-
----
-
-## Funcionalidades
-
-### Análise de Crédito
-- Avaliação de risco baseada em múltiplas variáveis (idade, renda, patrimônio, etc.)
-- Decisão automática de aprovação/reprovação com threshold otimizado
-- Cálculo de probabilidade de inadimplência
-
-### Dashboard e Histórico
-- Visualização de todas as análises realizadas com filtros e paginação
-- Estatísticas gerais (taxa de aprovação, total de análises, etc.)
-- Busca de análises específicas por ID
-- Gráficos e métricas consolidadas
-
-### API REST
-- Documentação automática com Swagger UI
-- Endpoints RESTful para integração com outros sistemas
-- Validação automática de dados com Pydantic
-- Tratamento robusto de erros
-
-###  Persistência
-- Armazenamento de todas as predições em PostgreSQL
-- Histórico completo com timestamps
-- Dados estruturados para análises futuras
-
----
-
-## Tecnologias
-
-### Backend
-- **[FastAPI](https://fastapi.tiangolo.com/)** - Framework web moderno e rápido
-- **[Pydantic](https://pydantic-docs.helpmanual.io/)** - Validação de dados
-- **[SQLAlchemy](https://www.sqlalchemy.org/)** - ORM para PostgreSQL
-- **[Uvicorn](https://www.uvicorn.org/)** - Servidor ASGI
-
-### Frontend
-- **[Streamlit](https://streamlit.io/)** - Interface web interativa
-- **[Pandas](https://pandas.pydata.org/)** - Manipulação de dados
-- **[Requests](https://requests.readthedocs.io/)** - Cliente HTTP
-
-### Machine Learning
-- **[scikit-learn](https://scikit-learn.org/)** - Modelagem e pipeline
-- **[NumPy](https://numpy.org/)** - Computação numérica
-- **[imbalanced-learn](https://imbalanced-learn.org/)** - Tratamento de desbalanceamento (SMOTE)
-
-### Infraestrutura
-- **[PostgreSQL](https://www.postgresql.org/)** - Banco de dados relacional
-- **[Docker](https://www.docker.com/)** - Containerização
-- **[Docker Compose](https://docs.docker.com/compose/)** - Orquestração de containers
+A arquitetura segue **Clean Architecture + Domain-Driven Design** nos dois backends, com um contrato HTTP explícito entre eles. O desenho completo do domínio (entidades, value objects, contratos REST, camadas) está documentado em [`docs/architecture.md`](docs/architecture.md) — este README cobre a visão geral e como rodar cada parte.
 
 ---
 
 ## Arquitetura
 
 ```
-┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
-│                 │      │                 │      │                 │
-│   Streamlit     │─────▶│   FastAPI       │─────▶│   PostgreSQL    │
-│   (Frontend)    │ HTTP │   (Backend)     │ SQL  │   (Database)    │
-│                 │◀─────│   + ML Model    │◀─────│                 │
-│                 │ JSON │                 │      │                 │
-└─────────────────┘      └─────────────────┘      └─────────────────┘
-     Port 8501                Port 8000                Port 5432
-         │                        │                        │
-         └────────────────────────┴────────────────────────┘
-                         Docker Compose
+┌──────────────┐        ┌──────────────────┐        ┌──────────────────┐
+│              │  HTTP  │                  │  HTTP  │                  │
+│ React + Vite │───────▶│   Spring Boot    │───────▶│  FastAPI          │
+│  (frontend)  │  JWT   │   (credit-api)   │        │  (ml-service)     │
+│              │◀───────│                  │◀───────│  modelo de ML     │
+└──────────────┘        └────────┬─────────┘        └──────────────────┘
+     :5173                       │ JDBC                    :8000
+                                  ▼
+                         ┌──────────────────┐
+                         │   PostgreSQL     │
+                         │   (credito_db)   │
+                         └──────────────────┘
+                                :5432
 ```
 
-### Fluxo de Dados
+- O **frontend** só conversa com o **Spring Boot** — nunca chama o FastAPI diretamente.
+- O **Spring Boot** (`credit-api`) é dono de toda a persistência, da autenticação e das regras de negócio; chama o **FastAPI** de forma síncrona (via `WebClient`, com timeout configurado) só para obter a predição do modelo.
+- O **FastAPI** (`ml-service`) é stateless, não tem banco: recebe os dados do cliente/empréstimo já validados, calcula as features derivadas e devolve a predição + versão do modelo.
+- Cada serviço tem `/health` (ou `/actuator/health`) e logging estruturado em JSON, propagando um `X-Request-Id` entre eles para rastrear uma predição ponta a ponta.
 
-1. **Usuário** preenche formulário no Streamlit
-2. **Frontend** envia requisição POST para `/predict`
-3. **Backend** valida dados, aplica feature engineering
-4. **Modelo ML** calcula probabilidade de inadimplência
-5. **Backend** aplica threshold e decide aprovação/reprovação
-6. **PostgreSQL** armazena predição com timestamp
-7. **Frontend** exibe resultado formatado ao usuário
+---
+
+## Estrutura do Repositório
+
+```
+Credit-Analysis-Model/
+├── docs/
+│   └── architecture.md        # Domínio, contratos REST, camadas (DDD/Clean Architecture)
+├── services/
+│   ├── credit-api/            # API principal — Spring Boot (Java 21)
+│   └── ml-service/            # Microsserviço de ML — FastAPI (Python)
+├── frontend/                  # React + Vite + TypeScript + Tailwind
+├── load-tests/
+│   └── analise-credito.js     # Teste de carga (k6)
+├── modelos/
+│   └── modelo_credito_final.joblib
+├── notebooks/                 # Exploração de dados e treino do modelo
+└── docker-compose.yaml        # PostgreSQL
+```
+
+---
+
+## Tecnologias
+
+| Componente | Stack |
+|---|---|
+| `services/credit-api` | Java 21, Spring Boot 4, Spring Security + JWT, Spring Data JPA, Flyway, WebClient, Spring Boot Actuator, Logback (JSON) |
+| `services/ml-service` | Python, FastAPI, scikit-learn, joblib, structlog |
+| `frontend` | React 19, TypeScript, Vite, Tailwind CSS v4, React Router |
+| Banco de dados | PostgreSQL 15 |
+| Testes | JUnit5 + Mockito + MockMvc (Java), pytest (Python), k6 (carga) |
 
 ---
 
 ## Pré-requisitos
 
-- **Python** 3.10 ou superior
-- **Docker** e **Docker Compose** (para PostgreSQL)
-- **Git** (para clonar o repositório)
+- **Docker** e **Docker Compose** (para o PostgreSQL)
+- **Java 21** e **Maven** (o `credit-api` já inclui o wrapper `./mvnw`)
+- **Python 3.11+** (para o `ml-service`)
+- **Node.js 20+** (para o `frontend`)
+- **[k6](https://k6.io/)** (opcional, só para o teste de carga)
 
 ---
 
-## Instalação
+## Como rodar tudo localmente
 
-### 1. Clone o repositório
+### 1. Banco de dados
 
 ```bash
-git clone https://github.com/henriqueluza/Credit-Analysis-Model.git
-cd Credit-Analysis-Model
+docker compose up -d postgres
 ```
 
-### 2. Crie um ambiente virtual
+### 2. Microsserviço de ML (`ml-service`)
 
 ```bash
-# Linux/Mac
-python3 -m venv venv
-source venv/bin/activate
-
-# Windows
-python -m venv venv
-venv\Scripts\activate
-```
-
-### 3. Instale as dependências
-
-```bash
+cd services/ml-service
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+uvicorn app.main:app --port 8000
 ```
 
-### 4. Configure as variáveis de ambiente
+Health check: `curl http://localhost:8000/health`
+
+### 3. API principal (`credit-api`)
+
+As migrations do Flyway rodam automaticamente na subida da aplicação.
 
 ```bash
-# Copie o arquivo de exemplo
-cp .env.example .env
-
-# Edite o .env com suas credenciais (opcional)
-# Por padrão já vem configurado para funcionar com o docker-compose
+cd services/credit-api
+./mvnw spring-boot:run
 ```
 
-### 5. Suba o banco de dados PostgreSQL
+Health check: `curl http://localhost:8080/actuator/health`
+
+Por padrão o `credit-api` espera o `ml-service` em `http://localhost:8000` (configurável via `ML_SERVICE_URL`) e o Postgres em `localhost:5432` (configurável via `DB_URL`/`DB_USERNAME`/`DB_PASSWORD`). Veja `services/credit-api/src/main/resources/application.yml` para todas as variáveis.
+
+### 4. Frontend
 
 ```bash
-docker-compose up -d
+cd frontend
+npm install
+npm run dev
 ```
 
-**Aguarde ~10 segundos** para o PostgreSQL inicializar completamente.
+Abre em **http://localhost:5173** (o Vite já vem configurado com proxy de `/auth` e `/api` para `http://localhost:8080` em desenvolvimento).
 
-### 6. Verifique se o banco está rodando
+### 5. Login
 
-```bash
-docker ps | grep postgres
-# Deve mostrar: postgres-credito com STATUS = Up
-```
+Um usuário administrador é semeado via migration para permitir o primeiro acesso:
+
+- **email:** `admin@creditanalysis.local`
+- **senha:** `admin123`
+
+> Credenciais de bootstrap para desenvolvimento local — troque a senha (ou crie um fluxo próprio de administração) antes de qualquer uso além disso. Novos usuários se cadastram via `POST /auth/register` e entram como `ANALISTA`.
 
 ---
 
-## Como Usar
+## Autenticação
 
-### Iniciar o Backend (API)
+- `POST /auth/register` — cria um usuário com role `ANALISTA` (público)
+- `POST /auth/login` — retorna um JWT (`Authorization: Bearer <token>`)
+- Todas as rotas de negócio exigem JWT válido; `GET /api/analises/stats` exige role `ADMIN`
+- Token expira em 60 minutos por padrão (`JWT_EXPIRATION_MINUTES`)
 
-```bash
-# Na raiz do projeto
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
+## Endpoints principais (`credit-api`)
 
-Acesse a documentação interativa em: **http://localhost:8000/docs**
+| Método | Rota | Descrição | Auth |
+|---|---|---|---|
+| POST | `/auth/register` | Cria usuário (`ANALISTA`) | Pública |
+| POST | `/auth/login` | Login, retorna JWT | Pública |
+| POST | `/api/analises` | Cria uma análise de crédito | `ANALISTA`, `ADMIN` |
+| GET | `/api/analises` | Histórico paginado (`page`, `size`) | `ANALISTA`, `ADMIN` |
+| GET | `/api/analises/{id}` | Detalhe de uma análise | `ANALISTA`, `ADMIN` |
+| GET | `/api/analises/stats` | Estatísticas agregadas | `ADMIN` |
+| GET | `/actuator/health` | Health check | Pública |
 
-### Iniciar o Frontend
-
-**Em outro terminal:**
-
-```bash
-streamlit run app.py
-```
-
-Abre automaticamente em: **http://localhost:8501**
-
-### Usar a Interface Web
-
-1. **Nova Análise**: Preencha os dados do cliente e clique em "Avaliar Crédito"
-2. **Histórico**: Visualize todas as análises realizadas com cores e filtros
-3. **Estatísticas**: Veja métricas consolidadas e gráficos
+Contrato completo (incluindo o do `ml-service`) em [`docs/architecture.md`](docs/architecture.md).
 
 ---
 
-##  API Endpoints
+## Testes
 
-### POST `/predict`
-Realiza análise de crédito e retorna decisão
+### `credit-api` (JUnit5, Mockito, MockMvc)
 
-**Request Body:**
-```json
-{
-  "idade": 35,
-  "valor_conta_poupanca": 50000.0,
-  "valor_conta_corrente": 15000.0,
-  "salario_anual": 120000.0,
-  "valor_emprestimo": 30000.0,
-  "prazo_meses": 48,
-  "situacao_moradia": "own"
-}
+```bash
+cd services/credit-api
+./mvnw test
 ```
 
-**Response:**
-```json
-{
-  "resultado": "Aprovado",
-  "probabilidade_risco": 0.0192,
-  "threshold_utilizado": 0.4158,
-  "prediction_id": 1
-}
+Cobre unitários dos use cases, testes de integração dos controllers (incluindo as regras de autorização por role) e o comportamento do cliente HTTP do modelo de ML sob timeout/erro.
+
+### `ml-service` (pytest)
+
+```bash
+cd services/ml-service
+pip install -r requirements-dev.txt
+pytest
 ```
 
-### GET `/predictions`
-Retorna histórico de predições com paginação
+Cobre a lógica de domínio (feature engineering, decisão de threshold), o use case de predição e os endpoints via `TestClient`.
 
-**Query Parameters:**
-- `limit`: Número de resultados (padrão: 10, máx: 100)
-- `skip`: Offset para paginação (padrão: 0)
+### Teste de carga (k6)
 
-**Response:**
-```json
-{
-  "total": 50,
-  "limit": 10,
-  "skip": 0,
-  "predictions": [...]
-}
+Com o `credit-api` (e o `ml-service` por trás dele) rodando:
+
+```bash
+k6 run load-tests/analise-credito.js
 ```
 
-### GET `/predictions/{prediction_id}`
-Busca uma predição específica por ID
-
-### GET `/predictions/stats`
-Retorna estatísticas gerais
-
-**Response:**
-```json
-{
-  "total_predicoes": 50,
-  "aprovados": 32,
-  "reprovados": 18,
-  "taxa_aprovacao": 64.0
-}
-```
+O script faz login como `admin`, e gera carga ramping até 10 VUs simultâneos contra `POST /api/analises`, `GET /api/analises` e `GET /api/analises/stats`, com thresholds de p95/p99 configurados. Última execução: 443 iterações, 0% de falha, p95 de `POST /api/analises` (que inclui a chamada ao FastAPI) em ~29ms.
 
 ---
 
-## Estrutura do Projeto
+## Observabilidade
 
-```
-Credit-Analysis-Model/
-│
-├── main.py                     # Backend FastAPI + lógica de ML
-├── app.py                      # Frontend Streamlit
-├── docker-compose.yml          # Orquestração PostgreSQL
-├── requirements.txt            # Dependências Python
-├── .env                        # Variáveis de ambiente (não versionado)
-├── .env.example                # Template de variáveis de ambiente
-├── .gitignore                  # Arquivos ignorados pelo Git
-│
-├── modelos/
-│   └── modelo_credito_final.joblib  # Modelo treinado + threshold
-│
-├── notebooks/
-│   ├── 01_exploratory_analysis.ipynb
-│   ├── 02_feature_engineering.ipynb
-│   └── 03_machine_learning.ipynb
-│
-├── data/
-│   └── dados_credito_processados.parquet
-│
-└── README.md
-```
+- **Health checks:** `GET /actuator/health` (credit-api) e `GET /health` (ml-service, verifica se o modelo está carregado)
+- **Logging estruturado:** JSON em ambos os serviços (Logback + logstash-encoder no Java, structlog no Python)
+- **Rastreamento ponta a ponta:** header `X-Request-Id` gerado (ou repassado) pelo `credit-api`, propagado para o `ml-service` e presente em todos os logs da requisição em ambos os serviços
 
 ---
 
 ## Modelo de Machine Learning
 
-### Abordagem
+- **Algoritmo:** Regressão Logística com regularização L1, `RobustScaler`
+- **Balanceamento:** SMOTE
+- **Validação:** Stratified K-Fold Cross-Validation
+- **F2-score:** 0.7456 — métrica escolhida por priorizar Recall (é mais custoso deixar passar um inadimplente do que reprovar um bom pagador)
+- **Threshold otimizado:** 0.4158
 
-- **Algoritmo**: Regressão Logística com regularização L2
-- **Balanceamento**: SMOTE (Synthetic Minority Over-sampling Technique)
-- **Escalonamento**: RobustScaler (resistente a outliers)
-- **Validação**: Stratified K-Fold Cross-Validation (5 folds)
+### Features do modelo
 
-### Features Utilizadas (11 variáveis)
+Originais: idade, prazo do empréstimo, situação de moradia.
+Derivadas (calculadas pelo `ml-service`): log do valor do empréstimo, log do saldo em conta corrente, indicador de conta corrente zerada, comprometimento de renda, parcela mensal estimada, renda livre mensal, cobertura de liquidez.
 
-**Features Originais:**
-- Idade
-- Prazo do empréstimo (meses)
-- Situação de moradia (própria/aluguel/graça)
+O artefato (`modelo_credito_final.joblib`) e seus metadados de versão (`model_metadata.json`) ficam em `services/ml-service/models/` e são expostos via `GET /model-info`.
 
-**Features Derivadas (Feature Engineering):**
-- Log do valor do empréstimo
-- Log do valor em conta corrente
-- Indicador de conta corrente zerada
-- Comprometimento de renda (%)
-- Parcela mensal estimada
-- Renda livre mensal
-- Cobertura de liquidez
-
-### Métricas de Desempenho
-
-| Métrica | Valor |
-|---------|-------|
-| **F2-Score** | 0.7456 |
-| **F1-Score** | 0.6412 |
-| **Precision (classe 1)** | 0.50 |
-| **Recall (classe 1)** | 0.85 |
-| **Acurácia** | 0.70 |
-
-**Threshold otimizado:** 0.4158 (maximiza F2-score, priorizando Recall)
-
-### Justificativa do F2-Score
-
-O F2-score foi escolhido como métrica principal porque:
-- Prioriza **Recall** sobre **Precision**
-- É mais importante **detectar inadimplentes** (evitar falsos negativos)
-- Aprovar um inadimplente custa mais que reprovar um bom pagador
-
----
-
-
-
-
+Os notebooks de exploração e treino do modelo estão em [`notebooks/`](notebooks/).
