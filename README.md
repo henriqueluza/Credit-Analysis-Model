@@ -181,7 +181,7 @@ Cobre a lógica de domínio (feature engineering, decisão de threshold), o use 
 Com o `credit-api` (e o `ml-service` por trás dele) rodando:
 
 ```bash
-k6 run load-tests/analise-credito.js
+k6 run -e ADMIN_SENHA=admin123 load-tests/analise-credito.js
 ```
 
 O script faz login como `admin`, e gera carga ramping até 10 VUs simultâneos contra `POST /api/analises`, `GET /api/analises` e `GET /api/analises/stats`, com thresholds de p95/p99 configurados. Última execução: 443 iterações, 0% de falha, p95 de `POST /api/analises` (que inclui a chamada ao FastAPI) em ~29ms.
