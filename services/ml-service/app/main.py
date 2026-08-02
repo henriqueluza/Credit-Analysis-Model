@@ -5,8 +5,12 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from app.domain.exceptions import FeaturesInvalidasError
+from app.infrastructure.logging import configurar_logging
 from app.infrastructure.modelo_joblib_repository import ModeloJoblibRepository
+from app.interface.middleware import RequestIdMiddleware
 from app.interface.routers import router
+
+configurar_logging()
 
 MODELS_DIR = Path(__file__).resolve().parent.parent / "models"
 
@@ -21,6 +25,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Serviço de ML - Análise de Crédito", lifespan=lifespan)
+app.add_middleware(RequestIdMiddleware)
 app.include_router(router)
 
 
