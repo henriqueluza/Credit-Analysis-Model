@@ -28,8 +28,11 @@ public class SecurityConfig {
                 .exceptionHandling(handling -> handling
                         .authenticationEntryPoint((request, response, authException) ->
                                 response.sendError(HttpStatus.UNAUTHORIZED.value(), "Autenticação necessária"))
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                response.sendError(HttpStatus.FORBIDDEN.value(), "Acesso negado"))
                 )
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/analises/stats").hasRole("ADMIN")
                         .requestMatchers("/api/analises/**").hasAnyRole("ANALISTA", "ADMIN")
