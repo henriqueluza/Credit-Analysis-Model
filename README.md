@@ -10,8 +10,6 @@ Sistema para apoiar a decisão de aprovação de crédito, combinando um modelo 
 
 A arquitetura segue **Clean Architecture + Domain-Driven Design** nos dois backends, com um contrato HTTP explícito entre eles. O desenho completo do domínio (entidades, value objects, contratos REST, camadas) está documentado em [`docs/architecture.md`](docs/architecture.md) — este README cobre a visão geral e como rodar cada parte.
 
-> Este repositório contém uma versão anterior, monolítica (FastAPI + Streamlit), preservada em [`app/`](app/) apenas para referência histórica. Ela não é mais mantida; o sistema atual é o descrito abaixo.
-
 ---
 
 ## Arquitetura
@@ -54,8 +52,7 @@ Credit-Analysis-Model/
 ├── modelos/
 │   └── modelo_credito_final.joblib
 ├── notebooks/                 # Exploração de dados e treino do modelo
-├── docker-compose.yaml        # PostgreSQL
-└── app/                       # Monólito legado (FastAPI + Streamlit) — não mantido
+└── docker-compose.yaml        # PostgreSQL
 ```
 
 ---
