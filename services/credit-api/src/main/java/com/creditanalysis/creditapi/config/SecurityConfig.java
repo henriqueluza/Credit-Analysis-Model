@@ -32,13 +32,14 @@ public class SecurityConfig {
                                 response.sendError(HttpStatus.FORBIDDEN.value(), "Acesso negado"))
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/error").permitAll()
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/actuator/health").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/analises/stats").hasRole("ADMIN")
-                        .requestMatchers("/api/analises/**").hasAnyRole("ANALISTA", "ADMIN")
-                        .anyRequest().authenticated()
-                )
+        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+        .requestMatchers("/error").permitAll()
+        .requestMatchers("/auth/**").permitAll()
+        .requestMatchers("/actuator/health").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/analises/stats").hasRole("ADMIN")
+        .requestMatchers("/api/analises/**").hasAnyRole("ANALISTA", "ADMIN")
+        .anyRequest().authenticated()
+)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
