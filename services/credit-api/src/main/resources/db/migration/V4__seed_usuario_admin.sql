@@ -5,3 +5,4 @@
 -- email: admin@creditanalysis.local | senha: admin123
 INSERT INTO usuarios (nome, email, senha_hash, role)
 VALUES ('Administrador', 'admin@creditanalysis.local', '$2b$10$icsk4RtNV5UBHT145yfPyun6H3B76ZhIPQrlRt7vAblPv3BYj.ftS', 'ADMIN');
+  
