@@ -5,6 +5,8 @@ import com.creditanalysis.creditapi.domain.model.Cliente;
 import com.creditanalysis.creditapi.domain.model.StatusAnalise;
 import com.creditanalysis.creditapi.domain.port.ModeloCreditoClient;
 import com.creditanalysis.creditapi.domain.port.PredicaoRisco;
+import com.creditanalysis.creditapi.infrastructure.logging.RequestIdFilter;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -35,10 +37,13 @@ public class ModeloCreditoWebClientAdapter implements ModeloCreditoClient {
                 prazoMeses
         );
 
+        String requestId = MDC.get(RequestIdFilter.MDC_KEY);
+
         ResultadoPredicaoResponse response;
         try {
             response = webClient.post()
                     .uri("/predict")
+                    .header(RequestIdFilter.HEADER, requestId)
                     .bodyValue(request)
                     .retrieve()
                     .bodyToMono(ResultadoPredicaoResponse.class)
