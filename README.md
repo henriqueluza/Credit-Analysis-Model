@@ -14,21 +14,9 @@ A arquitetura segue **Clean Architecture + Domain-Driven Design** nos dois backe
 
 ## Arquitetura
 
-```
-┌──────────────┐        ┌──────────────────┐        ┌──────────────────┐
-│              │  HTTP  │                  │  HTTP  │                  │
-│ React + Vite │───────▶│   Spring Boot    │───────▶│  FastAPI          │
-│  (frontend)  │  JWT   │   (credit-api)   │        │  (ml-service)     │
-│              │◀───────│                  │◀───────│  modelo de ML     │
-└──────────────┘        └────────┬─────────┘        └──────────────────┘
-     :5173                       │ JDBC                    :8000
-                                  ▼
-                         ┌──────────────────┐
-                         │   PostgreSQL     │
-                         │   (credito_db)   │
-                         └──────────────────┘
-                                :5432
-```
+<p align="center">
+  <img src="assets/architecture.svg" alt="Diagrama de arquitetura: frontend React se comunica com o credit-api (Spring Boot), que persiste no PostgreSQL e chama o ml-service (FastAPI) para obter a predição de risco" width="800">
+</p>
 
 - O **frontend** só conversa com o **Spring Boot** — nunca chama o FastAPI diretamente.
 - O **Spring Boot** (`credit-api`) é dono de toda a persistência, da autenticação e das regras de negócio; chama o **FastAPI** de forma síncrona (via `WebClient`, com timeout configurado) só para obter a predição do modelo.
@@ -37,10 +25,34 @@ A arquitetura segue **Clean Architecture + Domain-Driven Design** nos dois backe
 
 ---
 
+## Capturas de Tela
+
+**Login** — autenticação via email e senha; o JWT retornado é armazenado no navegador e enviado nas chamadas seguintes à API.
+
+<img src="assets/screenshots/login.png" alt="Tela de login" width="450">
+
+**Nova Análise de Crédito** — formulário com os dados do cliente e do empréstimo solicitado. Ao submeter, o `credit-api` consulta o `ml-service` e exibe o resultado (aprovado/reprovado), a probabilidade de risco, o threshold usado e a versão do modelo.
+
+<img src="assets/screenshots/nova-analise-reprovado.png" alt="Formulário de nova análise de crédito com resultado reprovado" width="700">
+<img src="assets/screenshots/nova-analise-aprovado.png" alt="Formulário de nova análise de crédito com resultado aprovado" width="700">
+
+**Histórico de Análises** — lista paginada de todas as análises já realizadas, com data, valor do empréstimo, prazo, situação de moradia, resultado e probabilidade de risco de cada uma.
+
+<img src="assets/screenshots/historico.png" alt="Tabela com o histórico de análises de crédito" width="700">
+
+**Documentação da API do `ml-service`** — Swagger/OpenAPI gerado automaticamente pelo FastAPI, com os endpoints `/predict`, `/health` e `/model-info`.
+
+<img src="assets/screenshots/ml-service-docs.png" alt="Documentação Swagger dos endpoints do ml-service" width="700">
+
+---
+
 ## Estrutura do Repositório
 
 ```
 Credit-Analysis-Model/
+├── assets/
+│   ├── architecture.svg       # Diagrama de arquitetura
+│   └── screenshots/           # Capturas de tela do sistema
 ├── docs/
 │   └── architecture.md        # Domínio, contratos REST, camadas (DDD/Clean Architecture)
 ├── services/
