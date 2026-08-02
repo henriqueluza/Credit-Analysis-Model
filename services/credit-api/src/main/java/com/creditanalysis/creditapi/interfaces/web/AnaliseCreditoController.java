@@ -13,9 +13,9 @@ import com.creditanalysis.creditapi.interfaces.web.dto.PaginaResponse;
 import com.creditanalysis.creditapi.interfaces.web.dto.SolicitacaoAnaliseRequest;
 import com.creditanalysis.creditapi.interfaces.web.dto.SolicitacaoAnaliseResponse;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,23 +34,22 @@ public class AnaliseCreditoController {
     private final ListarHistoricoUseCase listarHistoricoUseCase;
     private final ObterSolicitacaoUseCase obterSolicitacaoUseCase;
     private final ObterEstatisticasUseCase obterEstatisticasUseCase;
-    private final Long usuarioSistemaId;
 
     public AnaliseCreditoController(
             AnalisarCreditoUseCase analisarCreditoUseCase,
             ListarHistoricoUseCase listarHistoricoUseCase,
             ObterSolicitacaoUseCase obterSolicitacaoUseCase,
-            ObterEstatisticasUseCase obterEstatisticasUseCase,
-            @Value("${app.usuario-sistema-id}") Long usuarioSistemaId) {
+            ObterEstatisticasUseCase obterEstatisticasUseCase) {
         this.analisarCreditoUseCase = analisarCreditoUseCase;
         this.listarHistoricoUseCase = listarHistoricoUseCase;
         this.obterSolicitacaoUseCase = obterSolicitacaoUseCase;
         this.obterEstatisticasUseCase = obterEstatisticasUseCase;
-        this.usuarioSistemaId = usuarioSistemaId;
     }
 
     @PostMapping
-    public ResponseEntity<SolicitacaoAnaliseResponse> analisar(@Valid @RequestBody SolicitacaoAnaliseRequest request) {
+    public ResponseEntity<SolicitacaoAnaliseResponse> analisar(
+            @Valid @RequestBody SolicitacaoAnaliseRequest request,
+            @AuthenticationPrincipal Long usuarioId) {
         ComandoAnalisarCredito comando = new ComandoAnalisarCredito(
                 request.idade(),
                 request.salarioAnual(),
@@ -59,7 +58,7 @@ public class AnaliseCreditoController {
                 request.saldoContaPoupanca(),
                 request.valorEmprestimo(),
                 request.prazoMeses(),
-                usuarioSistemaId
+                usuarioId
         );
         SolicitacaoEmprestimo solicitacao = analisarCreditoUseCase.executar(comando);
         return ResponseEntity.status(HttpStatus.CREATED).body(SolicitacaoAnaliseResponse.deDominio(solicitacao));
